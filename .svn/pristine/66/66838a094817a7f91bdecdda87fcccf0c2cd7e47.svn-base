@@ -1,0 +1,53 @@
+@charset "utf-8";
+
+/*css重置*/
+body,form,div,span,ul,ol,li,p,pre,dl,dt,dd,h1,h2,h3,h4,h5,h6,em,a,fieldset,legend,address,label,textarea,select,input,figure,table,th,td,b,i{margin:0;padding:0;}
+html{height: 100%;}
+body{font-size: 14px; font-family: "微软雅黑","宋体", Verdana; height: 100%;}
+fieldset,img{border:0;}
+ul,li{list-style:none;}
+em,i{font-style:normal;}
+table{border-collapse:separate;border-spacing:0;}
+a{text-decoration:none; color: #000;}
+a:hover{ text-decoration:underline;}
+a:focus,input,button,select,textarea{outline:none;}
+h1,h2,h3,h4,h5,h6{ font-size:100%; font-variant: normal; font-weight: normal;}
+select,img{ vertical-align:middle;}
+legend{ display:none;}
+textarea{resize:none;}
+.fl{float: left;}
+.fr{float: right;}
+.clear{ clear:both;}
+.clearfix{zoom:1;}
+.clearfix:after{clear:both; content:"";display:block;height:0;line-height:0;visibility:hidden;}
+
+body{overflow: hidden;}
+.wrap{height: 83%; min-width: 1024px; overflow: hidden; background: url(../images/bg/body.jpg) center top no-repeat;background-size:cover;}
+.wrap .main{position: relative; width: 1366px; height: 768px; overflow: hidden; margin: 0 auto;}
+.wrap .main .login_box{position: fixed; right: 10%; top: 17%; width: 318px; height: 378px; border: 1px solid #5cadbf; -webkit-border-radius: 5px; -moz-border-radius: 5px; -ms-border-radius: 5px; border-radius: 5px; }
+.main .login_box h3{height: 49px; line-height: 49px; width: 100%; text-align: center; background: url(../images/bg/bg.png) center top no-repeat; color: #fff; font-size: 18px;}
+.main .login_box .login{width: 280px; margin: 30px auto 0;}
+.main .login_box .login li{width: 280px; height: 40px; line-height: 40px; background: #fff; margin-bottom: 14px;}
+.main .login_box .login li input{color: #333; font-size: 14px; width: 240px; padding: 0 20px; height: 40px; line-height: 40px; outline: none; border: 0; background: transparent;}
+.main .login_box .login li.code{margin-bottom: 20px; *margin-bottom: 14px;}
+.main .login_box .login li.code input{width: 132px;}
+.main .login_box .login li.code .code_img{width: 108px;}
+.main .login_box .login li.code .code_img img{vertical-align: top;}
+.main .login_box .login li.auto_login{background: none; height: 16px; line-height: 16px; margin-bottom: 30px;}
+.login li.auto_login label{color: #fff; font-size: 14px; background: url(../images/bg/bg2.png) left center no-repeat; padding-left: 20px; cursor: pointer;}
+.login li.auto_login label.on{background: url(../images/bg/bg2_on.png) left center no-repeat;}
+.main .login_box .login li.li_btn{background: none; height: 40px;}
+.main .login_box .login li.li_btn a{display: block; width: 120px; height: 40px; line-height: 40px; text-align: center; color: #fff; font-size: 16px; text-decoration: none; background: url(../images/bg/btn1.png) no-repeat;}
+.main .login_box .login li.li_btn a.log_btn{background: url(../images/bg/btn2.png) no-repeat;}
+.wrap .footer{position: fixed; left: 0; right: 0; bottom: 0; height: 17%; width: 100%; background: #282828;padding:0}
+.wrap .footer .ft_inner{width: 615px; padding-top: 48px; margin: 0 auto;}
+.footer .ft_inner .ft_logo{margin: 10px 24px 0 0;}
+.footer .ft_inner p{color: #fff; font-size: 16px; line-height: 25px;}
+
+
+
+
+
+
+
+

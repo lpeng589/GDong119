@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.MessageMapper">	
+		<select id="list" parameterType="com.pg.searchbean.MessageSearchBean" resultType="com.pg.searchbean.MessageSearchBean">
+			select * from tblmessage  
+			<trim prefix="where" prefixOverrides="and|or">
+				<if test="id !=null and id != ''">and tblmessage.`id`=#{id}</if>
+				<if test="status !=null">and tblmessage.`status`=#{status}</if>
+				<if test="employeeid != null "> and tblmessage.employeeid=#{employeeid}</if> 
+				<if test="checktime != null "> and tblmessage.createtime&gt;#{checktime}</if> 
+			</trim>
+			order by tblmessage.id desc,tblmessage.`status` desc 
+			<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+		</select>
+		<select id="listCount" parameterType="com.pg.searchbean.MessageSearchBean" resultType="java.lang.Integer">
+			select count(*) from tblmessage
+			<trim prefix="where" prefixOverrides="and|or">
+				<if test="id !=null and id != ''">and tblmessage.`id`=#{id}</if>
+				<if test="status !=null">and tblmessage.`status`=#{status}</if>
+				<if test="employeeid != null "> and tblmessage.employeeid=#{employeeid}</if> 
+			</trim>
+		</select>
+		<insert id="add" parameterType="com.pg.searchbean.MessageSearchBean">
+			insert into tblmessage(title,content,employeeid,status,createtime,link) values(#{title},#{content},#{employeeid},0,#{system_time},#{link})
+		</insert>
+		<delete id="delete">
+			delete from tblmessage where id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}		
+			</foreach>
+			)  
+		and 	employeeid=#{employeeid}	
+		</delete>
+		<!--批量设置已读  -->
+		<update id="updatestatus">
+		update `tblmessage`  set tblmessage.`status`=#{status}  where 
+		tblmessage.`id` in(
+					<foreach collection="ids" index="index" item="item" separator=","> 
+						#{item}		
+					</foreach>
+					) 
+					and 					tblmessage.employeeid=#{employeeid}	 
+		</update>
+		<!--设置所有已读  -->
+		<update id="updateAllstatus">
+		update `tblmessage`  set  tblmessage.`status`=1  where 
+		tblmessage.employeeid=#{employeeid}	 and tblmessage.`status`=0
+		</update>
+		<select id="getById" parameterType="java.lang.String" resultType="com.pg.searchbean.MessageSearchBean">
+			select * from tblmessage where id=#{id} and employeeid=#{employeeid}	 
+		</select>
+		<select id="listModel"  resultType="com.pg.bean.MessageModelBean">
+			select * from tblmessagemodel 
+		</select>
+</mapper>
+	

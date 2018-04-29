@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.QuartzMapper">
+
+<update id="updateQuartz">
+update `tblquartz` set 
+   `name`=#{name}  ,  `triggertime`=#{triggertime} ,       `employeeid`=#{employid_base} ,   `description`=#{description} ,   `status`=#{status} 
+ where 
+`id`=#{id}
+</update>
+
+
+
+
+<select id="list" parameterType="com.pg.searchbean.QuartzSearchBean"
+		resultType="com.pg.searchbean.QuartzSearchBean">
+		select  tblquartz.`id` ,   tblquartz.`jobname` ,   tblquartz.`jobgroup` ,   tblquartz.`operatetemplate` ,   tblquartz.`triggername` ,   tblquartz.`triggergroup` ,   tblquartz.`triggertime` ,   tblquartz.`issys` ,   tblquartz.`updatetime` ,   tblquartz.`createtime` ,   tblquartz.`employeeid` ,   tblquartz.`description` ,   tblquartz.`status`,   tblquartz.`name`    from `tblquartz`
+		<trim prefix="where" prefixOverrides="and|or">
+			  <if test="id != null "> and tblquartz.id=#{id}</if> 
+			  <if test="jobname != null "> and tblquartz.jobname=#{jobname}</if> 
+			  <if test="jobgroup != null "> and tblquartz.jobgroup=#{jobgroup}</if> 
+			  <if test="operatetemplate != null "> and tblquartz.operatetemplate=#{operatetemplate}</if> 
+			  <if test="triggername != null "> and tblquartz.triggername=#{triggername}</if> 
+			  <if test="triggergroup != null "> and tblquartz.triggergroup=#{triggergroup}</if> 
+			  <if test="triggertime != null "> and tblquartz.triggertime=#{triggertime}</if> 
+			  <if test="issys != null "> and tblquartz.issys=#{issys}</if> 
+			  <if test="updatetime != null "> and tblquartz.updatetime=#{updatetime}</if> 
+			  <if test="createtime != null "> and tblquartz.createtime=#{createtime}</if> 
+			  <if test="employeeid != null "> and tblquartz.employeeid=#{employeeid}</if> 
+			  <if test="description != null "> and tblquartz.description=#{description}</if> 
+			  <if test="status != null "> and tblquartz.status=#{status}</if>   
+		</trim>
+		order by tblquartz.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+	<select id="listCount" parameterType="com.pg.searchbean.QuartzSearchBean" resultType="java.lang.Integer">
+				select count(*) from `tblquartz` 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null "> and tblquartz.id=#{id}</if> 
+			  <if test="jobname != null "> and tblquartz.jobname=#{jobname}</if> 
+			  <if test="jobgroup != null "> and tblquartz.jobgroup=#{jobgroup}</if> 
+			  <if test="operatetemplate != null "> and tblquartz.operatetemplate=#{operatetemplate}</if> 
+			  <if test="triggername != null "> and tblquartz.triggername=#{triggername}</if> 
+			  <if test="triggergroup != null "> and tblquartz.triggergroup=#{triggergroup}</if> 
+			  <if test="triggertime != null "> and tblquartz.triggertime=#{triggertime}</if> 
+			  <if test="issys != null "> and tblquartz.issys=#{issys}</if> 
+			  <if test="updatetime != null "> and tblquartz.updatetime=#{updatetime}</if> 
+			  <if test="createtime != null "> and tblquartz.createtime=#{createtime}</if> 
+			  <if test="employeeid != null "> and tblquartz.employeeid=#{employeeid}</if> 
+			  <if test="description != null "> and tblquartz.description=#{description}</if> 
+			  <if test="status != null "> and tblquartz.status=#{status}</if>   
+		</trim>
+	</select>
+
+       <select id="getById" resultType="com.pg.searchbean.QuartzSearchBean"  parameterType="com.pg.searchbean.QuartzSearchBean" >
+       select  tblquartz.`id` ,   tblquartz.`jobname` ,   tblquartz.`jobgroup` ,   tblquartz.`operatetemplate` ,   tblquartz.`triggername` ,   tblquartz.`triggergroup` ,   tblquartz.`triggertime` ,   tblquartz.`issys` ,   tblquartz.`updatetime` ,   tblquartz.`createtime` ,   tblquartz.`employeeid` ,   tblquartz.`description` ,   tblquartz.`status` ,   tblquartz.`name`    from `tblquartz`  where tblquartz.`id`=#{id}
+       </select>
+</mapper>
+	

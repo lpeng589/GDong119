@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.FlowNodeMapper">
+
+<insert id="addFlowNode"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.FlowNodeBean" >
+insert into `tblflownode` (  `flowid` ,   `nodepre` ,   `statusnow` ,   `descriptionnow` ,   `nodenext` ,   `roleid` ,   `employeeid` ,      `issys` ,   `remark` ,   `tablename` ,   `valuetemplate` ,   `linkurl` ,    `isaudit`     )
+values( #{flowid} ,   #{nodepre} ,   #{statusnow} ,   #{descriptionnow} ,   #{nodenext} ,   #{roleid} ,   #{employeeid} ,  1,   #{remark} ,   #{tablename}  ,   #{valuetemplate} ,   #{linkurl} ,   #{isaudit}   )
+</insert>
+
+
+<delete id="delFlowNode">
+delete from `tblflownode` where id=#{id}  		${updatesql}
+</delete>
+
+
+<update id="updateFlowNode">
+update `tblflownode` set 
+id=#{id}
+<if test="descriptionnow != null "> , descriptionnow=#{descriptionnow}</if>  
+<!-- <if test="nodepre != null "> , nodepre=#{nodepre}</if>  -->
+<if test="statusnow != null "> , statusnow=#{statusnow}</if> 
+<!-- <if test="nodenext != null "> , nodenext=#{nodenext}</if>  -->
+<if test="roleid != null "> , roleid=#{roleid}</if> 
+<if test="employeeid != null "> , employeeid=#{employeeid}</if> 
+<if test="remark != null "> , remark=#{remark}</if> 
+<!-- <if test="isaudit != null "> , isaudit=#{isaudit}</if>  -->
+ where `id`=#{id}  	${updatesql}
+</update>
+
+
+
+
+<select id="list" parameterType="com.pg.searchbean.FlowNodeSearchBean"
+		resultType="com.pg.searchbean.FlowNodeSearchBean">
+		select  t.`id` ,   t.`flowid` ,   t.`nodepre` ,   t.`statusnow` ,   t.`descriptionnow` ,   t.`nodenext` ,   t.`roleid` ,   t.`employeeid` ,   t.`issys` ,   t.`remark` ,   t.`tablename` ,   t.`updatetime` ,   t.`createtime` ,   t.`valuetemplate` ,   t.`linkurl` ,    t.`isaudit`  ,    t.`method`  ,    t.`ismessage`  ,    t.`isflowlog`  ,    t.`methodafter`   
+		 ,a.name as flowname,a.flowkey
+		 from `tblflownode` t 
+		 left join `tblflow` a on t.flowid=a.id
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null "> and t.id=#{id}</if> 
+			  <if test="flowid != null "> and t.flowid=#{flowid}</if> 
+			  <if test="nodepre != null "> and t.nodepre=#{nodepre}</if> 
+			  <if test="statusnow != null "> and t.statusnow=#{statusnow}</if> 
+			  <if test="descriptionnow != null "> and t.descriptionnow=#{descriptionnow}</if> 
+			  <if test="nodenext != null "> and t.nodenext=#{nodenext}</if> 
+			  <if test="roleid != null "> and t.roleid=#{roleid}</if> 
+			  <if test="employeeid != null "> and t.employeeid=#{employeeid}</if> 
+			  <if test="issys != null "> and t.issys=#{issys}</if> 
+			  <if test="remark != null "> and t.remark=#{remark}</if> 
+			  <if test="tablename != null "> and t.tablename=#{tablename}</if> 
+			  <if test="updatetime != null "> and t.updatetime=#{updatetime}</if> 
+			  <if test="createtime != null "> and t.createtime=#{createtime}</if> 
+			  <if test="valuetemplate != null "> and t.valuetemplate=#{valuetemplate}</if> 
+			  <if test="linkurl != null "> and t.linkurl=#{linkurl}</if> 
+			  <if test="isaudit != null "> and t.isaudit=#{isaudit}</if>   
+			   <if test="isaudits != null "> and ${isaudits}</if>   
+		</trim>
+		order by t.id ASC 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+	<select id="listCount" parameterType="com.pg.searchbean.FlowNodeSearchBean" resultType="java.lang.Integer">
+				select count(*) from `tblflownode` t 
+				 left join `tblflow` a on t.flowid=a.id
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null "> and t.id=#{id}</if> 
+			  <if test="flowid != null "> and t.flowid=#{flowid}</if> 
+			  <if test="nodepre != null "> and t.nodepre=#{nodepre}</if> 
+			  <if test="statusnow != null "> and t.statusnow=#{statusnow}</if> 
+			  <if test="descriptionnow != null "> and t.descriptionnow=#{descriptionnow}</if> 
+			  <if test="nodenext != null "> and t.nodenext=#{nodenext}</if> 
+			  <if test="roleid != null "> and t.roleid=#{roleid}</if> 
+			  <if test="employeeid != null "> and t.employeeid=#{employeeid}</if> 
+			  <if test="issys != null "> and t.issys=#{issys}</if> 
+			  <if test="remark != null "> and t.remark=#{remark}</if> 
+			  <if test="tablename != null "> and t.tablename=#{tablename}</if> 
+			  <if test="updatetime != null "> and t.updatetime=#{updatetime}</if> 
+			  <if test="createtime != null "> and t.createtime=#{createtime}</if> 
+			  <if test="valuetemplate != null "> and t.valuetemplate=#{valuetemplate}</if> 
+			  <if test="linkurl != null "> and t.linkurl=#{linkurl}</if> 
+			  <if test="isaudit != null "> and t.isaudit=#{isaudit}</if>  
+			   <if test="isaudits != null "> and ${isaudits}</if>   
+		</trim>
+	</select>
+
+       <select id="getById" resultType="com.pg.searchbean.FlowNodeSearchBean">
+        select  t.`id` ,   t.`flowid` ,   t.`nodepre` ,   t.`statusnow` ,   t.`descriptionnow` ,   t.`nodenext` ,   t.`roleid` ,
+          t.`employeeid` ,   t.`issys` ,   t.`remark` ,   t.`tablename` ,  
+          t.`updatetime` ,   t.`createtime` ,   t.`valuetemplate` ,   t.`linkurl` ,   t.`method` ,   t.`ismessage` ,   t.`isflowlog` ,     t.`methodafter` ,
+         t.`isaudit`    from `tblflownode` t where t.`id`=#{id}
+       </select>
+    
+       <select id="getByTableNameAndStatus" resultType="com.pg.searchbean.FlowNodeSearchBean">
+        select  t.`id` ,   t.`flowid` ,   t.`nodepre` ,   t.`statusnow` ,   t.`descriptionnow` ,   t.`nodenext` ,   t.`roleid` ,
+          t.`employeeid`,   t.`issys` ,   t.`remark` ,   t.`tablename` ,  
+          t.`updatetime` ,   t.`createtime` ,   t.`valuetemplate` ,   t.`linkurl` ,   t.`method` ,   t.`ismessage` ,   t.`isflowlog` ,    t.`methodafter` ,
+         t.`isaudit`    from `tblflownode` t where t.`statusnow`=#{statusnow}   and  t.`tablename`=#{tablename}  
+       </select>
+       
+       <select id="getStatusCount" resultType="java.lang.Integer">
+        select    count(*)  from `tblflownode` t where t.`statusnow`=#{statusnow}   and  t.`tablename`=#{tablename}  
+       </select>
+     
+       <select id="getStatusInfo" resultType="java.util.HashMap">
+        select    *  from `tblflownode` t where t.`statusnow`=#{statusnow}   and  t.`tablename`=#{tablename}  
+       </select>
+       
+      <select id="getCounts" resultType="java.util.HashMap" parameterType="com.pg.searchbean.FlowNodeSearchBean">
+       select  t.*,a.flowid
+       from   ${tablename}  t left join tblflownode  a on a.statusnow=t.status  where  a.id=#{id} 
+       </select> 
+              
+      <select id="getCountsByType" resultType="java.lang.Integer" >
+       select   count(*)
+       from   ${tablename}  t left join tblflownode  a on a.statusnow=t.status  where  a.id=#{id} and  t.type=#{type}
+       </select> 
+
+		<update id="updateTableStatus" parameterType="com.pg.searchbean.FlowNodeSearchBean">
+		update  ${tablename}  set `status`=#{statusnow} ,   `rollback`=#{rollback} ,   `submitpersonid`=#{employid_base}  where
+		          `id`=#{id}
+		</update>
+		
+      <select id="getAllByTableName" resultType="java.util.HashMap">
+       select   *
+       from   ${tablename}     where  id=#{id} 
+       </select> 
+
+		<select id="getByFlowidAndStatus" resultType="com.pg.searchbean.FlowNodeSearchBean">
+        select  t.`id` ,   t.`flowid` ,   t.`nodepre` ,   t.`statusnow` ,   t.`descriptionnow` ,   t.`nodenext` ,   t.`roleid` ,
+          t.`employeeid`,   t.`issys` ,   t.`remark` ,   t.`tablename` ,  
+          t.`updatetime` ,   t.`createtime` ,   t.`valuetemplate` ,   t.`linkurl` ,   t.`method` ,   t.`ismessage` ,   t.`isflowlog` ,    t.`methodafter` ,
+         t.`isaudit`    from `tblflownode` t where t.`statusnow`=#{statusnow}   and  t.`flowid`=#{flowid}  
+       </select>
+</mapper>
+	

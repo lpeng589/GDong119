@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.CodeMapper">
+
+<insert id="addCode"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.CodeBean" >
+insert into `p_code` (  `remark`    ,   `employid`   ,   `url`       )
+values(   #{remark}  ,   #{employid_base}  ,   #{url}  )
+</insert>
+
+<delete id="delCode">
+delete from `p_code` where id=#{id}
+</delete>
+
+
+<delete id="delManyCode">
+delete from `p_code` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+
+<update id="updateCode">
+update `p_code` set 
+  `remark`=#{remark} 
+ where `id`=#{id}
+</update>
+
+<update id="updateUrl">
+update `p_code` set 
+  `url`=#{url} 
+ where `id`=#{id}
+</update>
+
+<update id="updateNeedCode">
+update `p_code` set 
+`id`=#{id} ,
+<!--  <if test="status != null "> , `status`=#{status} </if>  -->
+<!--  <if test="insertTime != null "> , `insertTime`=#{insertTime} </if>  -->
+<!--  <if test="updateTime != null "> , `updateTime`=#{updateTime} </if>  -->
+<!--  <if test="remark != null "> , `remark`=#{remark} </if>  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateManyCode">
+update `p_code` set 
+`id`=#{id}
+<!--   `status`=#{status} , -->
+<!--   `insertTime`=#{insertTime} , -->
+<!--   `updateTime`=#{updateTime} , -->
+<!--   `remark`=#{remark}  -->
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.CodeSearchBean"
+	resultType="com.pg.searchbean.CodeSearchBean">
+	select t.*,a.num from `p_code` t 
+	left join (select count(*) as num,codeid from p_codedetail GROUP BY codeid)  a on t.id=a.codeid
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>--> 
+    <!-- <if test="status != null  and status !='' "> and t.status=#{status}</if>--> 
+    <!-- <if test="insertTime != null  and insertTime !='' "> and t.insertTime=#{insertTime}</if>--> 
+    <!-- <if test="updateTime != null  and updateTime !='' "> and t.updateTime=#{updateTime}</if>--> 
+   <if test="remark!=null and remark!=''">and t.`remark` like concat('%',#{remark},'%')</if>
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="listCount" parameterType="com.pg.searchbean.CodeSearchBean" resultType="java.lang.Integer">
+			select count(*) from `p_code` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>  -->
+   <!-- <if test="status != null  and status !='' "> and t.status=#{status}</if>  -->
+   <!-- <if test="insertTime != null  and insertTime !='' "> and t.insertTime=#{insertTime}</if>  -->
+   <!-- <if test="updateTime != null  and updateTime !='' "> and t.updateTime=#{updateTime}</if>  -->
+   <if test="remark!=null and remark!=''">and t.`remark` like concat('%',#{remark},'%')</if>
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.CodeSearchBean">
+   select t.* from `p_code` t where t.`id`=#{id}
+</select>
+
+<select id="getCount"  parameterType="com.pg.searchbean.CodeSearchBean" resultType="java.lang.Integer">
+select   count(*)   from p_codedetail t where  t.`codeid`=#{id}
+</select>
+</mapper>
+	

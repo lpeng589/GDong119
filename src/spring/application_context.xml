@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xmlns:context="http://www.springframework.org/schema/context" 
+xmlns:mvc="http://www.springframework.org/schema/mvc"  
+xmlns:aop="http://www.springframework.org/schema/aop" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+    http://www.springframework.org/schema/tx   
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+    http://www.springframework.org/schema/context  
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/mvc  
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+    http://www.springframework.org/schema/aop      
+    http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+     
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">         
+
+ <property name="driverClassName" value="org.gjt.mm.mysql.Driver"/>        
+
+<!--  <property name="url" value="jdbc:mysql://14.116.158.141/guangdong_xf?useUnicode=true&amp;characterEncoding=utf-8"/>         
+
+ <property name="username" value="pnkoo"/>         
+
+ <property name="password" value="pnkoo123456"/>  -->
+  <property name="url" value="jdbc:mysql://127.0.0.1:3306/gdongxfdb2?useUnicode=true&amp;characterEncoding=utf-8"/>         
+
+ <property name="username" value="root"/>         
+
+ <property name="password" value="password"/>  
+
+<property name="initialSize" value="10"/>          
+
+<property name="maxActive" value="100"/>       
+
+   <property name="maxIdle" value="20"/>          
+
+<property name="minIdle" value="10"/>       
+<property name="validationQuery" value="select now() from dual limit 1"/>
+<property name="testWhileIdle" value="true"></property>      
+<property name="timeBetweenEvictionRunsMillis" value="30000"/>
+<property name="minEvictableIdleTimeMillis" value="18000000"/>
+<property name="testOnBorrow" value="true"/>
+<property name="testOnReturn" value="true"/>
+
+ </bean>        
+ 
+  <!-- 创建SqlSessionFactory，同时指定数据源-->       
+
+ <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">        
+
+ <property name="dataSource" ref="dataSource" />
+  <property name="mapperLocations" value="classpath:mybatis/*.xml" />         
+
+</bean>         
+<!-- MapperScannerConfigurer是spring和mybatis整合的mybatis-spring jar包中提供的一个类。 
+MapperFactoryBean的出现为了代替手工使用SqlSessionDaoSupport或SqlSessionTemplate编写数据访问对象(DAO)的代码,使用动态代理实现。
+-->
+ <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+       <property name="basePackage" value="com.pg.mapper" />  
+    </bean> 
+    
+    
+<!-- ================================事务相关控制=================================================    -->
+
+  <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">     
+          <property name="dataSource" ref="dataSource"></property>
+    </bean>     
+  
+  <tx:advice id="userTxAdvice" transaction-manager="transactionManager">
+<!--     <tx:attributes>
+      <tx:method name="delete*" propagation="REQUIRED" read-only="false" 
+                            rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException"/>
+      <tx:method name="insert*" propagation="REQUIRED" read-only="false" 
+                            rollback-for="java.lang.RuntimeException" />
+      <tx:method name="add*" propagation="REQUIRED" read-only="false" 
+                            rollback-for="java.lang.Exception" />                            
+      <tx:method name="update*" propagation="REQUIRED" read-only="false" 
+                            rollback-for="java.lang.Exception" />
+      
+      <tx:method name="find*" propagation="SUPPORTS"/>
+      <tx:method name="get*" propagation="SUPPORTS"/>
+      <tx:method name="select*" propagation="SUPPORTS"/>
+    </tx:attributes> -->
+        <tx:attributes>
+      <tx:method name="*" propagation="REQUIRED" read-only="false" 
+                            rollback-for="java.lang.Exception"/>
+
+    </tx:attributes>
+  </tx:advice>
+  
+  <aop:config>    
+    <aop:pointcut id="pc" expression="execution(public * com.pg.servlet.*.*(..))" /> 
+    <aop:pointcut id="pc1" expression="execution(public * com.pg.servlet.mobile.*.*(..))" /> 
+    <aop:pointcut id="pc2" expression="execution(public * com.pg.util.*.*(..))" /> 
+ <!--    <aop:pointcut id="pc3" expression="execution(public * com.pg.servlet.wechat*.*(..))" /> -->
+        
+    <aop:advisor pointcut-ref="pc" advice-ref="userTxAdvice" />
+    <aop:advisor pointcut-ref="pc1" advice-ref="userTxAdvice" />
+    <aop:advisor pointcut-ref="pc2" advice-ref="userTxAdvice" />
+ <!--    <aop:advisor pointcut-ref="pc3" advice-ref="userTxAdvice" />-->
+  </aop:config>
+
+ <bean  class="com.pg.util.ApplicationContextUtil"/>
+     <bean id="multipartResolver" class="com.pg.util.MyMultipartResolver">   
+           <property name="maxUploadSize"><value>10000000</value></property>  
+           <property name="defaultEncoding"><value>UTF-8</value></property> 
+    </bean> 
+</beans>

@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>首页</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="css/css.css">
+</head>
+<body style="background:#092045">
+	<div class="header-box">
+		<div class="header"><img src="images/logo.jpg" alt=""></div>
+	</div>
+	<div class="content-box">
+		<div class="content">
+		</div>
+		<div class="login-box">
+			<input type="text" class="input username">
+			<input type="password" class="input password">
+			<input type="text" class="input verification">
+			<div class="getverification" onclick="">3659</div>
+			<div class="btn"></div>
+			<div class="check" id="checked"></div>
+			<div id="check"></div>
+		</div>
+	</div>
+	<div class="footer-box">
+		<div class="footer">
+		<img src="images/logo2.jpg" alt="">
+		<div class="text">
+			<p style="margin-bottom:5px;">服务热线：0755-86571717</p>
+			<p>公司地址：广东省深圳市福田区国际创新中心C座19楼</p>	
+		</div>
+		</div>
+	</div>
+</body>
+<script>
+var check = document.getElementById("check");
+check.addEventListener("click",function(){
+	var checked = document.getElementById("checked");
+	checked.style.display = "block";
+})
+</script>
+</html>

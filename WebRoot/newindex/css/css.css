@@ -1,0 +1,19 @@
+*{margin:0; padding:0; border:0; font-family: "微软雅黑"; list-style-type: none; }
+img{display: block;}
+.header-box{width: 100%; overflow:hidden; background: #fff;}
+.content{width: 1920px; height: 800px; background: url(../images/bg.jpg) no-repeat; position: relative; left: 50%; margin-left: -960px;}
+.content-box{width: 100%; overflow:hidden; position: relative;}
+.login-box{width: 466px; height: 443px; background: url(../images/login.png) no-repeat; position: absolute; right: 7%; top: 50%; margin:-269.5px 0 0 0;}
+.input{width: 266px; height: 43px; padding:0 10px; position: absolute; top:108px; left: 127px; background: transparent; color: #0096ff;font-size: 14px;}
+.password{top:178px;}
+.verification{top:248px;width:180px}
+.getverification{position: absolute;top:248px;left:328px;width:85px;height:43px;line-height:43px;color:#0096ff;font-size: 18px;text-align: center;letter-spacing: 5px;}
+.btn{width: 320px; height: 45px; padding:0 10px; position: absolute; top:333px; left: 74px; background: transparent; cursor: pointer;}
+.header{width: 1530px; overflow: hidden; margin: 0 auto;}
+.footer-box{width: 100%; overflow:hidden; background: #000;}
+.footer{width: 585px; overflow: hidden; margin: 0 auto; height: 47px; padding: 26.5px 0;}
+.footer img{margin:5.5px 20px 0 0;}
+.footer img,.footer .text{float: left;}
+.footer p{color: #fff;}
+.check{width: 9px; height: 9px; position: absolute; top:310px; left: 79px; background: #0096ff; cursor: pointer; display: none;}
+#check{width: 150px; height: 20px; position: absolute; top:306px; left: 75px; cursor: pointer;}

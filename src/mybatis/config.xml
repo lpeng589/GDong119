@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.ConfigMapper">
+
+<select id="list" resultType="com.pg.bean.ConfigBean">
+		select * from `tblconfig` t 
+	</select>
+<select id="getMaxCode" resultType="java.lang.String">
+		select max(`code`) from  ${tableName}
+		<trim prefix="where" prefixOverrides="and|or">				
+				<if test="head!=null and head!=''">and code like #{head}</if>
+		</trim>
+</select>
+<update id="lockstock" parameterType="com.pg.bean.ConfigBean">
+	update `tblconfig` set `value`=#{value} where `key`=#{key} 
+</update>
+<select id="getCodeById" resultType="java.lang.String">
+		select code  from  ${tableName}  where `id`=#{id} 
+</select>
+
+<select id="getMaxlikeCode" resultType="java.lang.String">
+		select max(`code`) from  ${tableName}
+		<trim prefix="where" prefixOverrides="and|or">
+			  <if test="code != null and code !=''"> and code like concat('%',#{code},'%')</if> 
+		</trim>
+</select>
+</mapper>
+	

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.P_eventlogMapper">
+
+<insert id="addP_eventlog"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.P_eventlogBean" >
+insert into `p_eventlog` (  `eventid` ,   `eventlogid` ,   `status` ,     `deal` ,   `dealid` ,   `deal_opinion` ,   `deal_file` ,   `workuserid` ,   `department1` ,   `department2` ,   `dealaddress` , `next` , `next_id`   , `deal_status`    )
+values( #{eventid} ,   #{eventlogid} ,   #{status} ,   #{deal} ,   #{dealid} ,   #{deal_opinion} ,   #{deal_file}  ,   #{workuserid} ,   #{department1} ,   #{department2} ,   #{dealaddress}  , #{next} ,#{next_id},#{deal_status} )
+</insert>
+
+<delete id="delP_eventlog">
+delete from `p_eventlog` where id=#{id}
+</delete>
+
+<delete id="delManyP_eventlog">
+delete from `p_eventlog` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+
+<update id="updateP_eventlog">
+update `p_eventlog` set 
+<!--   `eventid`=#{eventid} , -->
+<!--   `eventlogid`=#{eventlogid} , -->
+<!--   `status`=#{status} , -->
+<!--   `createtime`=#{createtime} , -->
+<!--   `deal`=#{deal} , -->
+<!--   `dealid`=#{dealid} , -->
+<!--   `deal_opinion`=#{deal_opinion} , -->
+<!--   `deal_file`=#{deal_file} , -->
+<!--   `deal_time`=#{deal_time} , -->
+<!--   `workuserid`=#{workuserid} , -->
+<!--   `department1`=#{department1} , -->
+<!--   `department2`=#{department2} , -->
+<!--   `dealaddress`=#{dealaddress}  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateNeedP_eventlog">
+update `p_eventlog` set 
+`id`=#{id} 
+<!--  <if test="eventid != null "> , `eventid`=#{eventid} </if>  -->
+<!--  <if test="eventlogid != null "> , `eventlogid`=#{eventlogid} </if>  -->
+<!--  <if test="status != null "> , `status`=#{status} </if>  -->
+<!--  <if test="createtime != null "> , `createtime`=#{createtime} </if>  -->
+<!--  <if test="deal != null "> , `deal`=#{deal} </if>  -->
+<!--  <if test="dealid != null "> , `dealid`=#{dealid} </if>  -->
+<!--  <if test="deal_opinion != null "> , `deal_opinion`=#{deal_opinion} </if>  -->
+<!--  <if test="deal_file != null "> , `deal_file`=#{deal_file} </if>  -->
+<!--  <if test="deal_time != null "> , `deal_time`=#{deal_time} </if>  -->
+<!--  <if test="workuserid != null "> , `workuserid`=#{workuserid} </if>  -->
+<!--  <if test="department1 != null "> , `department1`=#{department1} </if>  -->
+<!--  <if test="department2 != null "> , `department2`=#{department2} </if>  -->
+<!--  <if test="dealaddress != null "> , `dealaddress`=#{dealaddress} </if>  -->
+<if test="operate2 != null "> , `operate2`=#{operate2} </if>
+ where `id`=#{id}
+</update>
+
+<update id="updateManyP_eventlog">
+update `p_eventlog` set 
+`id`=#{id}
+<!--   `eventid`=#{eventid} , -->
+<!--   `eventlogid`=#{eventlogid} , -->
+<!--   `status`=#{status} , -->
+<!--   `createtime`=#{createtime} , -->
+<!--   `deal`=#{deal} , -->
+<!--   `dealid`=#{dealid} , -->
+<!--   `deal_opinion`=#{deal_opinion} , -->
+<!--   `deal_file`=#{deal_file} , -->
+<!--   `deal_time`=#{deal_time} , -->
+<!--   `workuserid`=#{workuserid} , -->
+<!--   `department1`=#{department1} , -->
+<!--   `department2`=#{department2} , -->
+<!--   `dealaddress`=#{dealaddress}  -->
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.P_eventlogSearchBean"
+	resultType="com.pg.searchbean.P_eventlogSearchBean">
+	select t.*,p.type as p_type,p.name as p_name,p.content as p_content,p.jubao as p_jubao
+	 from `p_eventlog` t 
+	 left join p_event p on p.id=t.eventid
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>--> 
+    <!-- <if test="eventid != null  and eventid !='' "> and t.eventid=#{eventid}</if>--> 
+    <!-- <if test="status != null  and status !='' "> and t.status=#{status}</if>--> 
+    <!-- <if test="createtime != null  and createtime !='' "> and t.createtime=#{createtime}</if>--> 
+    <!-- <if test="deal != null  and deal !='' "> and t.deal=#{deal}</if>--> 
+    <!-- <if test="dealid != null  and dealid !='' "> and t.dealid=#{dealid}</if>--> 
+    <!-- <if test="deal_opinion != null  and deal_opinion !='' "> and t.deal_opinion=#{deal_opinion}</if>--> 
+    <!-- <if test="deal_file != null  and deal_file !='' "> and t.deal_file=#{deal_file}</if>--> 
+    <!-- <if test="deal_time != null  and deal_time !='' "> and t.deal_time=#{deal_time}</if>--> 
+    <!-- <if test="workuserid != null  and workuserid !='' "> and t.workuserid=#{workuserid}</if>--> 
+    <!-- <if test="department1 != null  and department1 !='' "> and t.department1=#{department1}</if>--> 
+    <!-- <if test="department2 != null  and department2 !='' "> and t.department2=#{department2}</if>--> 
+    <!-- <if test="dealaddress != null  and dealaddress !='' "> and t.dealaddress=#{dealaddress}</if>-->   
+        <if test="eventid != null  "> and t.eventid=#{eventid}</if> 
+    <if test="next != null  "> and t.next=#{next}</if>
+    
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="listCount" parameterType="com.pg.searchbean.P_eventlogSearchBean" resultType="java.lang.Integer">
+			select count(*) from `p_eventlog` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>  -->
+   <!-- <if test="eventid != null  and eventid !='' "> and t.eventid=#{eventid}</if>  -->
+   <!-- <if test="eventlogid != null  and eventlogid !='' "> and t.eventlogid=#{eventlogid}</if>  -->
+   <!-- <if test="status != null  and status !='' "> and t.status=#{status}</if>  -->
+   <!-- <if test="createtime != null  and createtime !='' "> and t.createtime=#{createtime}</if>  -->
+   <!-- <if test="deal != null  and deal !='' "> and t.deal=#{deal}</if>  -->
+   <!-- <if test="dealid != null  and dealid !='' "> and t.dealid=#{dealid}</if>  -->
+   <!-- <if test="deal_opinion != null  and deal_opinion !='' "> and t.deal_opinion=#{deal_opinion}</if>  -->
+   <!-- <if test="deal_file != null  and deal_file !='' "> and t.deal_file=#{deal_file}</if>  -->
+   <!-- <if test="deal_time != null  and deal_time !='' "> and t.deal_time=#{deal_time}</if>  -->
+   <!-- <if test="workuserid != null  and workuserid !='' "> and t.workuserid=#{workuserid}</if>  -->
+   <!-- <if test="department1 != null  and department1 !='' "> and t.department1=#{department1}</if>  -->
+   <!-- <if test="department2 != null  and department2 !='' "> and t.department2=#{department2}</if>  -->
+   <!-- <if test="dealaddress != null  and dealaddress !='' "> and t.dealaddress=#{dealaddress}</if>  --> 
+        <if test="eventid != null  "> and t.eventid=#{eventid}</if> 
+    <if test="next != null  "> and t.next=#{next}</if>
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.P_eventlogSearchBean">
+   select t.* from `p_eventlog` t where t.`id`=#{id}
+</select>
+
+<select id="detail" resultType="com.pg.searchbean.P_eventlogSearchBean">
+   SELECT	DATE_FORMAT(t.createtime,'%m/%d') as createtime2,e.jubao,t.*,
+	IF (t.deal = 1,a.name,IF (t.deal = 2, b. NAME, '')) dealname,
+	IF (t.next = 1,c.name,IF (t.next = 2, d. NAME, '')) nextname
+	FROM `p_eventlog` t
+	left join f_department a on a.id=t.dealid
+	left join h_workuser b on b.id=t.dealid
+	left join f_department c on c.id=t.next_id
+	left join h_workuser d on d.id=t.next_id
+	LEFT JOIN p_event e on e.id = t.eventid
+   where t.`eventid`=#{eventid}
+   order by t.id desc
+</select>
+
+<select id="getByWorkuserid" resultType="com.pg.searchbean.P_eventlogSearchBean">
+   select t.*,
+(select `status` from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) logstatus ,
+(select id from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) eventlogid ,
+(select next_id from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) next_id 
+from p_event t
+where (select count(*) from p_eventlog where next=2 and next_id=#{workuserid} and eventid=t.id) 
+</select>
+
+<select id="getOperate" resultType="com.pg.searchbean.P_eventlogSearchBean">
+   SELECT * FROM p_eventlog d 
+   WHERE id NOT in (SELECT eventlogid FROM p_eventlog p) AND next = 2 AND operate2 != 2 AND d.`status`=2
+</select>
+
+<select id="CountStatus" resultType="java.lang.Integer">
+     select count(*) from (select b.* from (select a.* from p_eventlog a order by a.id desc) b  group by b.eventid ) c where c.status=#{status} 
+</select>
+
+<select id="CountNum" resultType="java.lang.Integer">
+            select count(*) from (select b.* from p_eventlog b <if test="time != null  and time !='' "> where (select a.insertTime from p_event a where a.id=b.eventid) like concat('%',#{time},'%') </if>  group by b.eventid ) c 
+</select>
+
+<select id="CountWorkuserid" resultType="java.lang.Integer">
+            select count(*) from (select b.* from p_eventlog b where b.workuserid=#{workuserid} <if test="time != null  and time !='' "> and (select a.insertTime from p_event a where a.id=b.eventid) like concat('%',#{time},'%') </if>  group by b.eventid ) c 
+</select>
+
+<select id="CountDepartment1" resultType="java.lang.Integer">
+          select count(*) from (select b.* from p_eventlog b where b.department1=#{department1} <if test="time != null  and time !='' "> and (select a.insertTime from p_event a where a.id=b.eventid) like concat('%',#{time},'%') </if>  group by b.eventid ) c 
+</select>
+
+<select id="CountDepartment2" resultType="java.lang.Integer">
+            select count(*) from (select b.* from p_eventlog b where b.department2=#{department2} <if test="time != null  and time !='' "> and (select a.insertTime from p_event a where a.id=b.eventid) like concat('%',#{time},'%') </if>  group by b.eventid ) c 
+</select>
+
+
+<select id="listsendMessage" parameterType="com.pg.searchbean.P_eventlogSearchBean"
+	resultType="com.pg.searchbean.P_eventlogSearchBean">
+	select t.*,p.type as p_type,p.name as p_name,p.content as p_content,p.jubao as p_jubao,p.address as p_address
+	 from `p_eventlog` t 
+	 left join p_event p on p.id=t.eventid
+	<trim prefix="where" prefixOverrides="and|or">
+         <if test="eventid != null  "> and t.eventid=#{eventid}</if> 
+   		 <if test="next != null  "> and t.next=#{next}</if>
+		</trim>
+		group by t.next_id
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="getfenbolist" resultType="com.pg.searchbean.P_eventlogSearchBean">
+    SELECT d.`status`,d.`next_id`,p.* FROM p_event p
+	LEFT JOIN p_eventlog d on p.id = d.eventid
+    WHERE d.id NOT in (SELECT e.eventlogid FROM p_eventlog e) AND d.next = 2  AND d.`status`=1 AND d.next_id = #{next_id}
+</select>
+
+<select id="getfenbolistThread" resultType="com.pg.searchbean.P_eventlogSearchBean">
+   SELECT * FROM p_eventlog d 
+   WHERE id NOT in (SELECT eventlogid FROM p_eventlog p) AND d.next = 2  AND d.`status`=1 
+</select>
+	
+</mapper>
+	

@@ -1,0 +1,113 @@
+一、直接在class中做验证
+1、导入JS文件;
+<script src="../js/jquery.min.js"></script> 
+<script src="../js/jquery.metadata.js"></script>   （使用class="{}"的方式，必须引入包：jquery.metadata.js）
+<script src="../js/jquery.validate.js"></script>
+2、给要验证的表单添加 form 的id ;如：
+<form id="commentForm" method="post" action="">
+3、在html中的class添加验证，如以下添加：{required:true,messages:{required:'请输入内容'}}  和 name="XXX"
+<input type="text" class="{required:true,messages:{required:'请输入内容'}} span7"  name="username"  placeholder="请输入名称" value="">
+4、form的提交必须是 类型必须是type类型；如：
+<button type="submit" >提交</button>
+5、并且绑定表单：
+$(document).ready(function() {
+	 $("#commentForm").validate(
+			 {
+					errorClass: 'error-tips',
+
+					submitHandler: function() {
+						commitEdit();
+					}
+			 }); 
+});
+
+6、导入错误 样式 error-tips：
+<link rel="stylesheet" href="../css/common.css" />
+
+二、在JS中做验证：
+1、导入JS文件;
+<script src="../js/jquery.min.js"></script> 	
+<script src="../js/jquery.validate.js"></script>	
+2、给要验证的表单添加 form 的id ;如：
+<form id="commentForm" method="post" action="">
+3、在html中的class添加验证，如以下添加 name="XXX"
+<input type="text" class="span7"  name="username"  placeholder="请输入名称" value="">
+<input type="text" class="span7"  name="password"  placeholder="请输入名称" value="">
+4、form的提交必须是 类型必须是type类型；如：
+<button type="submit" >提交</button>
+5、绑定表单，并且做验证：（errorClass 为错误提示的样式）
+$(document).ready(function() {
+	 $("#commentForm").validate(
+			 {
+					rules: {
+						username: "required",
+						 password: {
+							 required: true,
+							 minlength: 5
+						},
+					},
+					messages: {
+						username: "请选择认证类型",
+						password:{
+						    required: "请输入密码",
+						    minlength: "密码不能小于5个字符",
+						   },
+					},
+					
+					errorClass: 'error-tips',
+
+					submitHandler: function() {
+						commitEdit();
+					}
+			 }); 
+});
+
+6、导入错误 样式 error-tips：
+<link rel="stylesheet" href="../css/common.css" />
+
+三、默认提示：默认提示已经修改，详情见common.js
+
+
+默认校验规则
+(1)required:true               必输字段
+(2)remote:"check.php"          使用ajax方法调用check.php验证输入值
+(3)email:true                  必须输入正确格式的电子邮件
+(4)url:true                    必须输入正确格式的网址
+(5)date:true                   必须输入正确格式的日期 日期校验ie6出错，慎用
+(6)dateISO:true                必须输入正确格式的日期(ISO)，例如：2009-06-23，1998/01/22 只验证格式，不验证有效性
+(7)number:true                 必须输入合法的数字(负数，小数)
+(8)digits:true                 必须输入整数
+(9)creditcard:                 必须输入合法的信用卡号
+(10)equalTo:"#field"           输入值必须和#field相同
+(11)accept:                    输入拥有合法后缀名的字符串（上传文件的后缀）
+(12)maxlength:5                输入长度最多是5的字符串(汉字算一个字符)
+(13)minlength:10               输入长度最小是10的字符串(汉字算一个字符)
+(14)rangelength:[5,10]         输入长度必须介于 5 和 10 之间的字符串")(汉字算一个字符)
+(15)range:[5,10]               输入值必须介于 5 和 10 之间
+(16)max:5                      输入值不能大于5
+(17)min:10                     输入值不能小于10
+ 
+默认的提示
+messages: {
+    required: "This field is required.",
+    remote: "Please fix this field.",
+    email: "Please enter a valid email address.",
+    url: "Please enter a valid URL.",
+    date: "Please enter a valid date.",
+    dateISO: "Please enter a valid date (ISO).",
+    dateDE: "Bitte geben Sie ein g眉ltiges Datum ein.",
+    number: "Please enter a valid number.",
+    numberDE: "Bitte geben Sie eine Nummer ein.",
+    digits: "Please enter only digits",
+    creditcard: "Please enter a valid credit card number.",
+    equalTo: "Please enter the same value again.",
+    accept: "Please enter a value with a valid extension.",
+    maxlength: $.validator.format("Please enter no more than {0} characters."),
+    minlength: $.validator.format("Please enter at least {0} characters."),
+    rangelength: $.validator.format("Please enter a value between {0} and {1} characters long."),
+    range: $.validator.format("Please enter a value between {0} and {1}."),
+    max: $.validator.format("Please enter a value less than or equal to {0}."),
+    min: $.validator.format("Please enter a value greater than or equal to {0}.")
+}
+
+						

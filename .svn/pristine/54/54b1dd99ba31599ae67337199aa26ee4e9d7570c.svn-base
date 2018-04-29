@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.WorkMapper">
+
+<insert id="addWork"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.WorkBean" >
+insert into `tblwork` (  `idstr` ,   `name` ,   `orderid` ,   `menuurl` ,    `tablename`     )
+values( #{idstr} ,   #{name} ,   #{orderid} ,   #{menuurl} ,     #{tablename}   )
+</insert>
+
+<delete id="delWork">
+delete from `tblwork` where id=#{id}
+</delete>
+
+<update id="updateWork">
+update `tblwork` set 
+ `idstr`=#{idstr} ,   `name`=#{name} ,   `orderid`=#{orderid} ,   `menuurl`=#{menuurl} ,   `tablename`=#{tablename}   
+ where `id`=#{id}
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.WorkSearchBean"
+		resultType="com.pg.searchbean.WorkSearchBean">
+		select  *  from `tblwork` t 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null "> and t.id=#{id}</if> 
+			  <if test="idstr != null "> and t.idstr=#{idstr}</if> 
+			  <if test="name != null "> and t.name=#{name}</if> 
+			  <if test="orderid != null "> and t.orderid=#{orderid}</if> 
+			  <if test="menuurl != null "> and t.menuurl=#{menuurl}</if> 
+
+			  <if test="tablename != null "> and t.tablename=#{tablename}</if>   
+		</trim>
+		order by t.orderid desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+	<select id="listCount" parameterType="com.pg.searchbean.WorkSearchBean" resultType="java.lang.Integer">
+				select count(*) from ${tablename} t 
+		<trim prefix="where" prefixOverrides="and|or">
+				${selectsql}
+		</trim>
+	</select>
+
+       <select id="getById" resultType="com.pg.searchbean.WorkSearchBean">
+       select  t.`id` ,   t.`idstr` ,   t.`name` ,   t.`orderid` ,   t.`menuurl`  ,   t.`tablename`    from `tblwork` t where t.`id`=#{id}
+       </select>
+</mapper>
+	

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.CodedetailMapper">
+
+<insert id="addCodedetail"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.CodedetailBean" >
+insert into `p_codedetail` (  `userid` ,   `codeid`     )
+values(   #{userid} ,   #{codeid}   )
+</insert>
+
+<delete id="delCodedetail">
+delete from `p_codedetail` where id=#{id}
+</delete>
+
+
+<delete id="delManyCodedetail">
+delete from `p_codedetail` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+
+<update id="updateCodedetail">
+update `p_codedetail` set 
+<!--   `insertTime`=#{insertTime} , -->
+<!--   `userid`=#{userid} , -->
+<!--   `codeid`=#{codeid}  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateNeedCodedetail">
+update `p_codedetail` set 
+`id`=#{id} ,
+<!--  <if test="insertTime != null "> , `insertTime`=#{insertTime} </if>  -->
+<!--  <if test="userid != null "> , `userid`=#{userid} </if>  -->
+<!--  <if test="codeid != null "> , `codeid`=#{codeid} </if>  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateManyCodedetail">
+update `p_codedetail` set 
+`id`=#{id}
+<!--   `insertTime`=#{insertTime} , -->
+<!--   `userid`=#{userid} , -->
+<!--   `codeid`=#{codeid}  -->
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.CodedetailSearchBean"
+	resultType="com.pg.searchbean.CodedetailSearchBean">
+	select t.*,a.nickname,a.headimgurl from `p_codedetail` t 
+	left join p_user a on a.id=t.userid
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>--> 
+    <!-- <if test="insertTime != null  and insertTime !='' "> and t.insertTime=#{insertTime}</if>--> 
+    <!-- <if test="userid != null  and userid !='' "> and t.userid=#{userid}</if>--> 
+    <if test="codeid != null  "> and t.codeid=#{codeid}</if>   
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="listCount" parameterType="com.pg.searchbean.CodedetailSearchBean" resultType="java.lang.Integer">
+			select count(*) from `p_codedetail` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>  -->
+   <!-- <if test="insertTime != null  and insertTime !='' "> and t.insertTime=#{insertTime}</if>  -->
+   <!-- <if test="userid != null  and userid !='' "> and t.userid=#{userid}</if>  -->
+   <if test="codeid != null  "> and t.codeid=#{codeid}</if>  
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.CodedetailSearchBean">
+   select t.* from `p_codedetail` t where t.`id`=#{id}
+</select>
+</mapper>
+	

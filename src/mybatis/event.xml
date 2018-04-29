@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.EventMapper">
+
+<insert id="addEvent"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.EventBean" >
+insert into `p_event` (     `type` ,   `name` ,   `phone` ,   `content` ,   `pic1` ,   `pic2` ,   `pic3` ,   `video`   ,   `userid`  ,   `voice`,   `address` , formId , jubao , latitude , longitude)
+values(   #{type} ,   #{name} ,   #{phone} ,   #{content} ,   #{pic1} ,   #{pic2} ,   #{pic3} ,   #{video} ,    #{userid}  ,    #{voice}  ,    #{address} , #{formId} , #{jubao}  , #{latitude} , #{longitude} )
+</insert>
+
+<delete id="delEvent">
+delete from `p_event` where id=#{id}
+</delete>
+
+<delete id="delManyEvent">
+delete from `p_event` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+
+<update id="updateEvent">
+update `p_event` set id=#{id}
+ where `id`=#{id}
+</update>
+
+<update id="updateManyEvent">
+update `p_event` set 
+`id`=#{id}
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.EventSearchBean" resultType="com.pg.searchbean.EventSearchBean">
+	select t.*,
+(select `status` from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) logstatus ,
+(select id from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) eventlogid ,
+(select next_id from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) next_id ,
+(select next from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) next 
+from p_event t
+	<trim prefix="where" prefixOverrides="and|or">
+    <if test="type != null"> and t.type=#{type}</if> 
+    <if test="name != null  and name !='' "> and t.name like concat('%',#{name},'%')</if> 
+    <if test="phone != null  and phone !='' "> and t.phone like concat('%',#{phone},'%')</if>
+    <if test="type != null"> and t.type=#{type}</if>
+    <if test="logstatus != null and logstatus!=678"> and (select `status` from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id)=#{logstatus}</if>
+    <if test="logstatus==678"> and (select `status` from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) in(6,7,8)</if>
+    <if test="deptid != null"> 
+    and (${deptid} in(select id from f_department where id in(SELECT dealid from p_eventlog where eventid=t.id and deal=1)) or #{deptid}=-1)
+    or (SELECT next_id FROM p_eventlog WHERE id = (SELECT MAX(id) FROM p_eventlog WHERE eventid = t.id  <if test="logstatus != null and logstatus!=678"> and status=#{logstatus}</if><if test="logstatus==678"> and status in(6,7,8)</if>) and next_id=${deptid})
+    or (select `status` from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id  <if test="logstatus != null and logstatus!=678"> and status=#{logstatus}</if><if test="logstatus==678"> and status in(6,7,8)</if>) and eventid=t.id)=0
+    </if>
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="listCount" parameterType="com.pg.searchbean.EventSearchBean" resultType="java.lang.Integer">
+			select count(*) from p_event t
+	<trim prefix="where" prefixOverrides="and|or">
+    <if test="type != null"> and t.type=#{type}</if> 
+    <if test="name != null  and name !='' "> and t.name like concat('%',#{name},'%')</if> 
+    <if test="phone != null  and phone !='' "> and t.phone like concat('%',#{phone},'%')</if>
+    <if test="type != null"> and t.type=#{type}</if>
+    <if test="logstatus != null and logstatus!=678"> and (select `status` from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id)=#{logstatus}</if>
+    <if test="logstatus==678"> and (select `status` from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) in(6,7,8)</if>
+    <if test="deptid != null"> 
+   and (${deptid} in(select id from f_department where id in(SELECT dealid from p_eventlog where eventid=t.id and deal=1)) or #{deptid}=-1)
+    or (SELECT next_id FROM p_eventlog WHERE id = (SELECT MAX(id) FROM p_eventlog WHERE eventid = t.id  <if test="logstatus != null and logstatus!=678"> and status=#{logstatus}</if><if test="logstatus==678"> and status in(6,7,8)</if>) and next_id=${deptid})
+    or (select `status` from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id  <if test="logstatus != null and logstatus!=678"> and status=#{logstatus}</if><if test="logstatus==678"> and status in(6,7,8)</if>) and eventid=t.id)=0
+    </if>
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.EventSearchBean">
+   select t.jubao,t.latitude,t.longitude,t.id,t.type,t.formId,t.name,t.phone,t.content,t.pic1,t.pic2,t.pic3,t.video,DATE_FORMAT(t.insertTime,'%Y/%m/%d') as inserttime2,t.userid,t.voice,t.address,a.nickname,a.headimgurl,a.openid,
+   (select `status` from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) logstatus,
+   (select id from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) eventlogid  ,
+   (select next_id from p_eventlog where id=(SELECT MAX(id) from p_eventlog where eventid=t.id) and eventid=t.id) next_id  
+   from `p_event` t  
+   left join p_user a on a.id=t.userid 
+	where t.`id`=#{id}
+   <if test="user != null"> and t.userid=#{userid}</if> 
+</select>
+
+	<select id="wxlist" parameterType="com.pg.searchbean.MSearchBean" resultType="com.pg.searchbean.EventSearchBean">
+		select t.id,t.type,t.name,t.phone,t.content,t.pic1,t.pic2,t.pic3,t.video,DATE_FORMAT(t.insertTime,'%Y/%m/%d') as inserttime2,t.updateTime,t.reply,t.level,t.appraise,t.userid,t.voice,t.address,a.nickname,a.headimgurl from `p_event` t left join p_user a on a.id=t.userid
+		<trim prefix="where" prefixOverrides="and|or">
+				and t.userid=#{userid}
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+	
+	<select id="mlist" parameterType="com.pg.searchbean.MSearchBean" resultType="com.pg.searchbean.EventSearchBean">
+	select t.* from `p_event` t order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+</mapper>
+	

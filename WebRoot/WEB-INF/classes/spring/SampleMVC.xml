@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xmlns:context="http://www.springframework.org/schema/context" 
+xmlns:mvc="http://www.springframework.org/schema/mvc"  
+xmlns:aop="http://www.springframework.org/schema/aop" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+    http://www.springframework.org/schema/tx   
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+    http://www.springframework.org/schema/context  
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/mvc  
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+    http://www.springframework.org/schema/aop      
+    http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+	<!-- 自动扫描的包名 -->
+	<context:component-scan base-package="com.pg"/>
+	<!-- 默认的注解映射的支持 -->
+	<mvc:annotation-driven/>
+
+<!-- 	<bean name="sqlSessionFactory" class="com.pg.mybatis.SessionFactory" scope="prototype"/> -->
+
+<!-- spring 上传文件组件 。影响到kindeditor上传，故注释 -->
+<!-- 	<bean id="multipartResolver"   -->
+<!--           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">   -->
+<!--     </bean>  -->
+  	<bean name="config" class="com.pg.util.Config">  
+  	
+  	
+  	
+  	
+  	<!-- 	<property name="wx_appid" value="wx2e06f7e82147a4f4"/>公众号id 
+  		<property name="wx_secret" value="62f29b589cf5f36100f22c8f1d5412af"/>公众号secret
+  		<property name="URL" value="http://localhost/"/>服务地址
+  		<property name="KEY_COMPANY" value="盘酷科技"/>默认公司关键字
+  			模版消息推送的模版ID
+  		<property name="template_id" value="_3tuWNozlG0OKOnMSgebj_Y91FBNo8TixYlQB-6MnFw"/>   
+  			文件默认放在attached/file下面，图片在attached/image下面  。。。需要先在OSS中建立这三个文件夹
+  		<property name="ossAccessID" value="lO5k6anESQXkK8dY"></property>上传图片到OSS
+  		<property name="ossAccessKey" value="4SW3NQbpOov0puNaPNLP2IA3otIpYd"></property> 上传图片到OSS
+  		<property name="ossEndPoint" value="http://oss-cn-shenzhen.aliyuncs.com"></property>上传图片到 OSS
+  		<property name="ossPublicPicBucketName" value="pnkooshop"></property>上传图片到 OSS
+  		<property name="ossPublicPictureUrlPrefix" value="http://pnkooshop.oss-cn-shenzhen.aliyuncs.com"/>上传图片到 OSS
+		<property name="ossStatus" value="n"></property>y为OSS+本地，其他为只是本地存储
+		<property name="uploadpath" value="/attached/"/>	本地图片文件上传地址 :需要在webapps\ROOT下先建立attached文件夹
+		<property name="image_1_w" value="200"></property>本地存放两张图，第一张图缩放宽度..第二张图为原图
+		图片根路径
+		<property name="imageRootPath" value="http://pnkooshop.oss-cn-shenzhen.aliyuncs.com"></property> -->
+		
+		
+	</bean>
+    <aop:aspectj-autoproxy />
+</beans>

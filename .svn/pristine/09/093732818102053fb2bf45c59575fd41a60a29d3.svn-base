@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.LogMapper">
+	<insert id="add" parameterType="com.pg.bean.LogBean">
+		insert into
+		tbllog(moduleidstr,relatedid,description,macaddress,operatetime,ip,value,loginname)
+		values(#{moduleidstr},#{relatedid},#{description},#{macaddress},#{operatetime},#{ip},#{value},#{loginname} );
+	</insert>
+	<select id="list" parameterType="com.pg.searchbean.LogSearchBean"
+		resultType="com.pg.bean.LogBean">
+		select a.*,b.category from tbllog a left join tblmodule b on a.moduleidstr=b.idstr
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="moduleidstr!=null and moduleidstr!=''">and a.moduleidstr=#{moduleidstr}</if>
+			<if test="relatedid !=null and relatedid !=''">and a.relatedid=#{relatedid}</if>
+			<if test="loginname!=null and loginname!=''">and a.loginname=#{loginname}</if>
+			<if test="category!=null and category!=''">and b.category=#{category}</if>
+			<if test="starttime!=null and starttime!=''">and operatetime&gt;=#{starttime}</if>
+			<if test="endtime!=null and endtime!=''">and operatetime  &lt; DATE_ADD(#{endtime},INTERVAL 1 DAY)</if>
+		</trim>
+		order by id desc limit #{limitStart},#{limitSize}
+	</select>
+	<select id="listCount" parameterType="com.pg.searchbean.LogSearchBean"
+		resultType="java.lang.Integer">
+		select count(*) from tbllog a left join tblmodule b on a.moduleidstr=b.idstr
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="moduleidstr!=null and moduleidstr!=''">and a.moduleidstr=#{moduleidstr}</if>
+			<if test="relatedid !=null and relatedid !=''">and a.relatedid=#{relatedid}</if>
+			<if test="loginname!=null and loginname!=''">and a.loginname=#{loginname}</if>
+			<if test="category!=null and category!=''">and b.category=#{category}</if>
+			<if test="starttime!=null and starttime!=''">and operatetime&gt;=#{starttime}</if>
+			<if test="endtime!=null and endtime!=''">and operatetime  &lt; DATE_ADD(#{endtime},INTERVAL 1 DAY)</if>
+		</trim>
+	</select>
+</mapper>

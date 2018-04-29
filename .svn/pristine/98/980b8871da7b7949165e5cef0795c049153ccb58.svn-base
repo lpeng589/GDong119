@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.ModuleMapper">
+ 		<select id="getModule" resultType="com.pg.bean.ModuleBean">
+		select  t.* from tblmodule t  where 
+		t.id in (
+			 select  distinct(module_id) 
+  			from tblrolemodule  a left join tblrole b on  a.role_id=b.id
+   			 where
+   			 b.status=1
+   			  <if test="roleids != null and roleids !=''"> and  a.role_id     in(   ${roleids}  )  </if> 
+		) order by orderid
+	</select> 
+	
+	<select id="getAllModule" resultType="com.pg.bean.ModuleBean">
+		select t.* from tblmodule t order by orderid
+	</select>
+	<select id="getAllCategory" resultType="java.lang.String">
+		select category from tblmodule
+		group by category  order by orderid
+	</select>
+	
+	<select id="getAllMenu" resultType="com.pg.bean.ModuleBean">
+		select t.* from tblmodule t where ismenu=1 order by menuorderid ,orderid
+	</select>
+	
+	
+	<select id="getCategory" resultType="com.pg.bean.ModuleBean">
+		select distinct category from tblmodule
+	</select>
+	
+	
+</mapper>

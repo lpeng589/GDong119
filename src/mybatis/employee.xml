@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.EmployeeMapper">	
+		<select id="list" parameterType="com.pg.searchbean.EmployeeSearchBean" resultType="com.pg.searchbean.EmployeeSearchBean">
+			select r.role_name,d.`name` department ,f.`name` department1 , a.* from tblemployee a 
+			LEFT JOIN f_department d on d.id = a.departmentid
+			LEFT JOIN h_workuser h on h.id = a.workuserid
+			LEFT JOIN f_department f on f.id = h.departmentid
+			LEFT JOIN tblrole r on r.id=a.roleids
+			<trim prefix="where" prefixOverrides="and|or">				
+				<if test="loginname!=null and loginname!=''">and a.`loginname`=#{loginname}</if>
+				<if test="username!=null and username!=''">and a.`username` like concat('%',#{username},'%')</if>
+				<if test="department!=null and department!=''">and d.`department` like concat('%',#{department},'%')</if>
+				<if test="roleids!=null and roleids!=''">and a.`roleids` like concat('%',#{roleids},'%')</if>
+				<if test="status!=null">and a.`status`=#{status}</if>
+			</trim>
+			  order by a.`status` desc,a.id desc
+			<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize}</if>
+		</select>
+		<select id="listCount" parameterType="com.pg.searchbean.EmployeeSearchBean" resultType="java.lang.Integer">
+			select count(*) from tblemployee a 
+			LEFT JOIN f_department d on d.id = a.departmentid
+			LEFT JOIN h_workuser h on h.id = a.workuserid
+			LEFT JOIN f_department f on f.id = h.departmentid
+			LEFT JOIN tblrole r on r.id=a.roleids
+			<trim prefix="where" prefixOverrides="and|or">
+				<if test="loginname!=null and loginname!=''">and a.loginname=#{loginname}</if>
+				<if test="username!=null and username!=''">and a.username like concat('%',#{username},'%')</if>
+				<if test="department!=null and department!=''">and d.`department` like concat('%',#{department},'%')</if>
+				<if test="roleids!=null and roleids!=''">and a.`roleids` like concat('%',#{roleids},'%')</if>
+				<if test="status!=null">and a.`status`=#{status}</if>
+			</trim>
+		</select>
+		<insert id="add" parameterType="com.pg.bean.EmployeeBean">
+			insert into tblemployee(username,loginname,password,`status` ,`employee_id` ,`position`,`roleids`,`phone`,`email`,`faxnumber`,`workuserid`,`departmentid`) values(#{username},#{loginname},#{password},#{status},#{employid_base}  ,#{position}   ,#{roleids}  ,#{phone}  ,#{email}  ,#{faxnumber},#{workuserid},#{departmentid}  )
+		</insert>
+		<delete id="delete">
+			delete from tblemployee where id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}		
+			</foreach>
+			
+			)  
+		</delete>
+		<update id="update" parameterType="com.pg.bean.EmployeeBean">
+			update tblemployee set username=#{username},password=#{password},`status`=#{status},`position`=#{position},`roleids`=#{roleids},`phone`=#{phone},`email`=#{email},`faxnumber`=#{faxnumber},`workuserid`=#{workuserid},`departmentid`=#{departmentid} where id=#{id}  
+		</update>
+		<select id="getById" parameterType="java.lang.String" resultType="com.pg.searchbean.EmployeeSearchBean">
+			select t.* , a.type departtype, b.id departmentid1 ,c.id departmentid2 from tblemployee t
+			left join f_department a on a.id=t.departmentid
+			left join f_department b on b.id=a.parentid
+			left join f_department c on c.id=b.parentid
+			where t.id=#{id} 
+		</select>
+		<select id="getByName" parameterType="java.lang.String" resultType="com.pg.bean.EmployeeBean">
+			select * from tblemployee where loginname=#{loginname} 
+		</select>
+		<select id="login"  resultType="com.pg.searchbean.EmployeeSearchBean">
+			select DISTINCT t.* , a.parentid deptparentid from tblemployee t
+			left join f_department a on a.id=departmentid
+			where t.loginname=#{loginname}  and t.status=1  
+		</select>
+		<select id="moduleList" resultType="com.pg.bean.ModuleBean"> 
+			select tblmodule.id,tblmodule.idstr,tblmodule.name,tblmodule.description,tblmodule.category,usr.moduleid
+			from tblmodule left join (select * from tblemployeemodule where
+			employeeid=#{id}) usr on tblmodule.id = usr.moduleid
+			 where tblmodule.orderid&gt;0 order by tblmodule.orderid;	
+		</select>
+		
+ 		<select id="getByRoleId" parameterType="java.lang.String" resultType="java.lang.Integer">
+			select count(*) from tblemployee where `roleids` like concat('%',#{roleids},'%')
+		</select>
+		
+		<select id="getEmployeeidByRoleid" parameterType="com.pg.searchbean.EmployeeSearchBean" resultType="com.pg.searchbean.EmployeeSearchBean">
+			select * from tblemployee where `roleids` like concat('%',#{roleids},'%')
+		</select>
+		
+		 <update id="updateSevrice" parameterType="com.pg.searchbean.EmployeeSearchBean">
+		  update  ${tablename}  set `employid`=#{employid}  where
+		          `employid`=#{employid_base}  and 
+		          `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}		
+			</foreach>
+			)
+		</update>
+		<update id="updateSevriceChild" parameterType="com.pg.searchbean.EmployeeSearchBean">
+		  update  ${tablename2}  set `employid`=#{employid}  where
+		          `employid`=#{employid_base}  and 
+		          ${parentidname}  in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}		
+			</foreach>
+			)
+		</update>
+		
+</mapper>
+	

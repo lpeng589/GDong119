@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.F_departmentMapper">
+
+<insert id="addF_department"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.F_departmentBean" >
+insert into `f_department` (  `name`  <if test="parentid != null">, `parentid`</if>, `address`, `longitude`, `latitude` , `type` )
+values( #{name}   <if test="parentid != null">, #{parentid}</if>, #{address}, #{longitude}, #{latitude}, #{type} )
+</insert>
+
+<delete id="delF_department">
+delete from `f_department` where id=#{id}
+</delete>
+
+
+<delete id="delManyF_department">
+delete from `f_department` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+
+<update id="updateF_department">
+update `f_department` set 
+  `name`=#{name}  , `address`=#{address}   ,`longitude`=#{longitude}   ,`latitude`=#{latitude} 
+<!--   `createtime`=#{createtime} , -->
+<!--   `updateTime`=#{updateTime}  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateNeedF_department">
+update `f_department` set 
+`id`=#{id} 
+<if test="name != null and name != '' "> , `name`=#{name} </if>
+<if test="parentid != null "> , `parentid`=#{parentid} </if>
+<if test="type != null "> , `type`=#{type} </if>
+<!--  <if test="createtime != null "> , `createtime`=#{createtime} </if>  -->
+<!--  <if test="updateTime != null "> , `updateTime`=#{updateTime} </if>  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateManyF_department">
+update `f_department` set 
+`id`=#{id}
+<!--   `name`=#{name} , -->
+<!--   `createtime`=#{createtime} , -->
+<!--   `updateTime`=#{updateTime}  -->
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.F_departmentSearchBean"
+	resultType="com.pg.searchbean.F_departmentSearchBean">
+	select t.*,(select count(*) from h_workuser a where a.departmentid=t.id) as usercount ,a.parentid parent2id from `f_department` t 
+	left join f_department a on a.id=t.parentid
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>--> 
+    <if test="name != null  and name !='' "> and t.name like concat('%',#{name},'%')</if> 
+    <if test="parentid != null "> and t.parentid=#{parentid}</if> 
+    <!-- <if test="updateTime != null  and updateTime !='' "> and t.updateTime=#{updateTime}</if>-->   
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="listCount" parameterType="com.pg.searchbean.F_departmentSearchBean" resultType="java.lang.Integer">
+			select count(*) from `f_department` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>  -->
+  <if test="name != null  and name !='' "> and t.name like concat('%',#{name},'%')</if> 
+  <if test="parentid != null "> and t.parentid=#{parentid}</if> 
+   <!-- <if test="createtime != null  and createtime !='' "> and t.createtime=#{createtime}</if>  -->
+   <!-- <if test="updateTime != null  and updateTime !='' "> and t.updateTime=#{updateTime}</if>  --> 
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.F_departmentSearchBean">
+   select t.*,d.`name` parentname,(select count(*) from h_workuser a where a.departmentid=t.id) as usercount 
+   from `f_department` t 
+   LEFT JOIN f_department d on d.id=t.parentid
+   where t.`id`=#{id}
+</select>
+
+<select id="getByParentId" resultType="com.pg.searchbean.F_departmentSearchBean">
+   select * from `f_department` t 
+   where t.`parentid`=#{parentid}
+</select>
+
+<select id="getByName" resultType="com.pg.searchbean.F_departmentSearchBean">
+   select t.* from `f_department` t where t.`name`=#{name}  limit 1
+</select>
+
+<select id="getByType" resultType="com.pg.searchbean.F_departmentSearchBean">
+   select t.* from `f_department` t where t.`type`=#{type} 
+</select>
+
+<select id="getTownByName" resultType="com.pg.searchbean.F_departmentSearchBean">
+   select t.* from `f_department` t where t.name like concat('%',#{name},'%') and type=2  limit 1
+</select>
+
+</mapper>
+	

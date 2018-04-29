@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.FlowMapper">
+
+<insert id="addFlow"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.FlowBean" >
+insert into `tblflow` (  `firstnodeid` ,   `name` ,   `remark` ,   `flowkey`     )
+values( #{firstnodeid} ,   #{name} ,   #{remark} ,   #{flowkey}   )
+</insert>
+
+
+<delete id="delFlow">
+delete from `tblflow` where id=#{id}
+</delete>
+
+
+<update id="updateFlow">
+update `tblflow` set 
+ `firstnodeid`=#{firstnodeid} ,   `name`=#{name} ,   `remark`=#{remark} ,   `flowkey`=#{flowkey}   
+ where `id`=#{id}
+</update>
+
+
+
+
+<select id="list" parameterType="com.pg.searchbean.FlowSearchBean"
+		resultType="com.pg.searchbean.FlowSearchBean">
+		select  t.`id` ,   t.`firstnodeid` ,   t.`name` ,   t.`remark` ,   t.`flowkey`  ,   t.`orderid`   from `tblflow` t 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null "> and t.id=#{id}</if> 
+			  <if test="firstnodeid != null "> and t.firstnodeid=#{firstnodeid}</if> 
+			  <if test="name != null "> and t.name=#{name}</if> 
+			  <if test="remark != null "> and t.remark=#{remark}</if> 
+			  <if test="flowkey != null "> and t.flowkey=#{flowkey}</if>   
+		</trim>
+		order by t.orderid desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+	<select id="listCount" parameterType="com.pg.searchbean.FlowSearchBean" resultType="java.lang.Integer">
+				select count(*) from `tblflow` t 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null "> and t.id=#{id}</if> 
+			  <if test="firstnodeid != null "> and t.firstnodeid=#{firstnodeid}</if> 
+			  <if test="name != null "> and t.name=#{name}</if> 
+			  <if test="remark != null "> and t.remark=#{remark}</if> 
+			  <if test="flowkey != null "> and t.flowkey=#{flowkey}</if>   
+		</trim>
+	</select>
+
+       <select id="getById" resultType="com.pg.searchbean.FlowSearchBean">
+       select  t.`id` ,   t.`firstnodeid` ,   t.`name` ,   t.`remark` ,   t.`flowkey`    from `tblflow` t where t.`id`=#{id}
+       </select>
+       
+       <select id="getByFlowKey" resultType="com.pg.searchbean.FlowSearchBean">
+        select  t.`id` ,   t.`firstnodeid` ,   t.`name` ,   t.`remark` ,   t.`flowkey`  ,d.roleid,d.employeeid
+           from `tblflow` t       
+           left join tblflownode d on d.id=t.`firstnodeid`
+           where t.`flowkey`=#{flowkey}
+       </select>
+       
+</mapper>
+	

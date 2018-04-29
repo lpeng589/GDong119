@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.AlarmMapper">
+
+<insert id="addAlarm"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.AlarmBean" >
+insert into `p_alarm` (    `type` ,    `userid`     )
+values(    #{type} ,    #{userid}   )
+</insert>
+
+<delete id="delAlarm">
+delete from `p_alarm` where id=#{id}
+</delete>
+
+<delete id="delManyAlarm">
+delete from `p_alarm` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+
+<update id="updateAlarm">
+update `p_alarm` set 
+		`status`=#{status} , 
+		`type`=#{type}
+<!--   `insertTime`=#{insertTime} , -->
+<!--   `updateTime`=#{updateTime} , -->
+<!--   `employid`=#{employid} , -->
+<!--   `userid`=#{userid}  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateStatus">
+update `p_alarm` set 
+  `status`=#{status} 
+ where `id`=#{id}
+</update>
+
+
+<update id="updateNeedAlarm">
+update `p_alarm` set 
+`id`=#{id} ,
+<!--  <if test="status != null "> , `status`=#{status} </if>  -->
+<!--  <if test="type != null "> , `type`=#{type} </if>  -->
+<!--  <if test="insertTime != null "> , `insertTime`=#{insertTime} </if>  -->
+<!--  <if test="updateTime != null "> , `updateTime`=#{updateTime} </if>  -->
+<!--  <if test="employid != null "> , `employid`=#{employid} </if>  -->
+<!--  <if test="userid != null "> , `userid`=#{userid} </if>  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateManyAlarm">
+update `p_alarm` set 
+`id`=#{id}
+<!--   `status`=#{status} , -->
+<!--   `type`=#{type} , -->
+<!--   `insertTime`=#{insertTime} , -->
+<!--   `updateTime`=#{updateTime} , -->
+<!--   `employid`=#{employid} , -->
+<!--   `userid`=#{userid}  -->
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.AlarmSearchBean"
+	resultType="com.pg.searchbean.AlarmSearchBean">
+	select t.*,a.nickname,headimgurl,b.username,b.departmentid,b.position,MAX(c.insertTime) AS lastTime from `p_alarm` t left join p_user a on a.id=t.userid left join tblemployee b on b.id=t.employid left join p_alarmdetail c ON t.id=c.alarmid
+	<trim prefix="where" prefixOverrides="and|or">
+		<if test="status != null"> and t.status=#{status}</if> 
+    <if test="nickname != null  and nickname !='' "> and a.nickname like concat('%',#{nickname},'%')</if> 
+		</trim>
+		GROUP BY t.id
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="listCount" parameterType="com.pg.searchbean.AlarmSearchBean" resultType="java.lang.Integer">
+			select count(*) from `p_alarm` t left join p_user a on a.id=t.userid left join tblemployee b on b.id=t.employid
+	<trim prefix="where" prefixOverrides="and|or">
+	<if test="status != null"> and t.status=#{status}</if> 
+    <if test="nickname != null  and nickname !='' "> and a.nickname like concat('%',#{nickname},'%')</if> 
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.AlarmSearchBean">
+   select t.*,a.nickname,headimgurl,b.username,b.departmentid,b.position from `p_alarm` t left join p_user a on a.id=t.userid left join tblemployee b on b.id=t.employid where t.`id`=#{id}
+</select>
+
+<select id="wxlist" parameterType="com.pg.searchbean.MSearchBean"
+	resultType="com.pg.searchbean.EventSearchBean">
+	select t.*,a.nickname,headimgurl,b.username,b.departmentid,b.position from `p_alarm` t left join p_user a on a.id=t.userid left join tblemployee b on b.id=t.employid
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>--> 
+    <!-- <if test="status != null  and status !='' "> and t.status=#{status}</if>--> 
+    <!-- <if test="type != null  and type !='' "> and t.type=#{type}</if>--> 
+    <!-- <if test="insertTime != null  and insertTime !='' "> and t.insertTime=#{insertTime}</if>--> 
+    <!-- <if test="updateTime != null  and updateTime !='' "> and t.updateTime=#{updateTime}</if>--> 
+    <!-- <if test="employid != null  and employid !='' "> and t.employid=#{employid}</if>--> 
+   				and t.userid=#{userid}
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+
+<select id="getwxalarm" parameterType="com.pg.searchbean.MSearchBean" resultType="com.pg.searchbean.AlarmSearchBean">
+select *  from p_alarm where userid=#{userid} ORDER BY id DESC LIMIT 0,1
+</select>	
+</mapper>
+	

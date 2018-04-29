@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.F_streetMapper">
+
+<insert id="addF_street"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.F_departmentBean" >
+insert into `f_street` (  `name`  , `departmentid` )
+values( #{name}   , #{departmentid} )
+</insert>
+
+<delete id="delF_street">
+delete from `f_street` where id=#{id}
+</delete>
+
+
+<delete id="delManyF_street">
+delete from `f_street` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+
+<update id="updateF_street">
+update `f_street` set 
+  `name`=#{name}  ,`departmentid`=#{departmentid} 
+<!--   `createtime`=#{createtime} , -->
+<!--   `updateTime`=#{updateTime}  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateNeedF_street">
+update `f_street` set 
+`id`=#{id} 
+<if test="name != null and name != '' "> , `name`=#{name} </if>
+<if test="departmentid != null "> , `departmentid`=#{departmentid} </if>
+<!--  <if test="createtime != null "> , `createtime`=#{createtime} </if>  -->
+<!--  <if test="updateTime != null "> , `updateTime`=#{updateTime} </if>  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateManyF_street">
+update `f_street` set 
+`id`=#{id}
+<!--   `name`=#{name} , -->
+<!--   `departmentid`=#{departmentid} , -->
+<!--   `createtime`=#{createtime} , -->
+<!--   `updateTime`=#{updateTime}  -->
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.F_streetSearchBean"
+	resultType="com.pg.searchbean.F_streetSearchBean">
+	select t.*,d.`name` department from `f_street` t LEFT JOIN f_department d on d.id = t.departmentid
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>--> 
+    <if test="name != null  and name !='' "> and t.name like concat('%',#{name},'%')</if> 
+    <!-- <if test="createtime != null  and createtime !='' "> and t.createtime=#{createtime}</if>--> 
+    <!-- <if test="updateTime != null  and updateTime !='' "> and t.updateTime=#{updateTime}</if>-->   
+    <if test="department != null  and department !='' "> and d.name=#{department}</if>   
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="listCount" parameterType="com.pg.searchbean.F_streetSearchBean" resultType="java.lang.Integer">
+			select count(*) from `f_street` t LEFT JOIN f_department d on d.id = t.departmentid
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>  -->
+  <if test="name != null  and name !='' "> and t.name like concat('%',#{name},'%')</if> 
+   <!-- <if test="createtime != null  and createtime !='' "> and t.createtime=#{createtime}</if>  -->
+   <!-- <if test="updateTime != null  and updateTime !='' "> and t.updateTime=#{updateTime}</if>  --> 
+   <!-- <if test="departmentid != null  and departmentid !='' "> and t.departmentid=#{departmentid}</if>  -->
+   <if test="department != null  and department !='' "> and d.name like concat('%',#{department},'%')</if>  
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.F_streetSearchBean">
+   select t.*,d.`name` department from `f_street` t LEFT JOIN f_department d on d.id = t.departmentid
+   where t.`id`=#{id}
+</select>
+
+<select id="getByName" resultType="com.pg.searchbean.F_streetSearchBean">
+   select t.* from `f_street` t  where  t.name like concat('%',#{name},'%') limit 1
+</select>
+
+</mapper>
+	

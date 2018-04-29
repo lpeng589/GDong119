@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.H_workuserMapper">
+
+<insert id="addH_workuser"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.H_workuserBean" >
+insert into `h_workuser` (    `name` ,  `phone` ,    `departmentid` ,   `type` ,   `remark`  , `ismanager`   )
+values(   #{name} ,    #{phone} ,     #{departmentid} ,   #{type} ,   #{remark}  , #{ismanager})
+</insert>
+
+<delete id="delH_workuser">
+delete from `h_workuser` where id=#{id}
+</delete>
+
+
+<delete id="delManyH_workuser">
+delete from `h_workuser` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+
+<update id="updateH_workuser">
+update `h_workuser` set 
+  `name`=#{name} ,
+   `departmentid`=#{departmentid} ,
+  `phone`=#{phone} ,
+  `remark`=#{remark} ,
+  `islogin`=#{islogin},
+  ismanager=#{ismanager}
+ where `id`=#{id}
+</update>
+
+<update id="UpdateCode">
+update `h_workuser` set 
+  `code`=#{code} 
+ where `id`=#{id}
+</update>
+
+<update id="updateStatus">
+update `h_workuser` set 
+  `status`=#{status} 
+ where `id`=#{id}
+</update>
+
+<update id="updateNeedH_workuser">
+update `h_workuser` set 
+`id`=#{id} ,
+<!--  <if test="status != null "> , `status`=#{status} </if>  -->
+<!--  <if test="name != null "> , `name`=#{name} </if>  -->
+<!--  <if test="createtime != null "> , `createtime`=#{createtime} </if>  -->
+<!--  <if test="updateTime != null "> , `updateTime`=#{updateTime} </if>  -->
+<!--  <if test="phone != null "> , `phone`=#{phone} </if>  -->
+<!--  <if test="departmentid != null "> , `departmentid`=#{departmentid} </if>  -->
+<!--  <if test="type != null "> , `type`=#{type} </if>  -->
+<!--  <if test="remark != null "> , `remark`=#{remark} </if>  -->
+<!--  <if test="code != null "> , `code`=#{code} </if>  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateManyH_workuser">
+update `h_workuser` set 
+`id`=#{id}
+<!--   `status`=#{status} , -->
+<!--   `name`=#{name} , -->
+<!--   `createtime`=#{createtime} , -->
+<!--   `updateTime`=#{updateTime} , -->
+<!--   `phone`=#{phone} , -->
+<!--   `departmentid`=#{departmentid} , -->
+<!--   `type`=#{type} , -->
+<!--   `remark`=#{remark} , -->
+<!--   `code`=#{code}  -->
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.H_workuserSearchBean"
+	resultType="com.pg.searchbean.H_workuserSearchBean">
+	select t.*,a.name as departmentname from `h_workuser` t left join f_department a on a.id=t.departmentid
+	<trim prefix="where" prefixOverrides="and|or">
+	    <if test="status != null "> and t.status=#{status}</if> 
+	    <if test="name != null  and name !='' "> and t.name like concat('%',#{name},'%')</if> 
+	    <if test="phone != null  and phone !='' "> and t.phone like concat('%',#{phone},'%')</if> 
+	    <if test="type != null "> and t.type=#{type}</if> 
+	     <if test="departmentid != null "> and t.departmentid=#{departmentid}</if> 
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="listCount" parameterType="com.pg.searchbean.H_workuserSearchBean" resultType="java.lang.Integer">
+			select count(*) from `h_workuser` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		<if test="status != null "> and t.status=#{status}</if> 
+	    <if test="name != null  and name !='' "> and t.name like concat('%',#{name},'%')</if> 
+	    <if test="phone != null  and phone !='' "> and t.phone like concat('%',#{phone},'%')</if> 
+	    <if test="type != null "> and t.type=#{type}</if> 
+	    <if test="departmentid != null "> and t.departmentid=#{departmentid}</if> 
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.H_workuserSearchBean">
+   select t.*,a.name as departmentname ,a.parentid as departparentid,a.type as departtype  from `h_workuser` t 
+   left join f_department a on a.id=t.departmentid where t.`id`=#{id}
+</select>
+
+<select id="getByPhone" resultType="com.pg.searchbean.H_workuserSearchBean">
+  select t.*,a.name as departmentname ,a.parentid as departparentid,a.type as departtype from `h_workuser` t left join f_department a on a.id=t.departmentid where t.`phone`=#{phone}
+</select>
+
+<select id="getByPhone2" resultType="com.pg.searchbean.H_workuserSearchBean">
+  select t.* from `h_workuser` t where t.`phone`=#{phone}  limit 1
+</select>
+
+<select id="getByCode" resultType="com.pg.searchbean.H_workuserSearchBean">
+   select t.*,a.name as departmentname  ,a.parentid as departparentid,a.type as departtype
+   from `h_workuser` t 
+   left join f_department a on a.id=t.departmentid where t.`code`=#{code}
+</select>
+
+<select id="getByDepartmentid" resultType="com.pg.searchbean.H_workuserSearchBean">
+   select t.* from `h_workuser` t  where t.`departmentid`=#{departmentid} and t.status=1 and  ismanager=1   limit 1
+</select>
+
+<select id="getMinByDepartmentid" resultType="com.pg.searchbean.H_workuserSearchBean">
+   select t.*,a.name as departmentname ,a.parentid as departparentid,a.type as departtype,
+    (select count(a.id) from p_eventlog a where a.dealid=t.id and a.deal=0) as countEventlog
+    from `h_workuser` t  
+     left join f_department a on a.id=t.departmentid
+    where t.`departmentid`=#{departmentid} order by countEventlog  limit 1
+</select>
+</mapper>

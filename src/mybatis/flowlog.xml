@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.FlowLogMapper">
+
+<insert id="addFlowLog"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.FlowLogBean" >
+insert into `tblflowlog` (  `status` ,   `employeeid` ,   `opinion` ,   `file` ,   `tablename` ,   `tableid` ,   `statusnow` ,   `nodenow` ,   `statusnext` ,   `nodenext` ,   `issys` ,   `linkurl` ,   `remark` ,   `value`   ,   `descriptionnow`  ,   `method`  ,   `flowid`  ,   `ismessage`    ,   `isreturn`     )
+values( #{status} ,   #{employeeid} ,   #{opinion} ,   #{file} ,   #{tablename} ,   #{tableid} ,   #{statusnow} ,   #{nodenow} ,   #{statusnext} ,   #{nodenext} ,   #{issys} ,   #{linkurl} ,   #{remark} ,   #{value} ,   #{descriptionnow}   ,   #{method} ,   #{flowid} ,   #{ismessage},   #{isreturn})
+</insert>
+
+<delete id="delFlowLog">
+delete from `tblflowlog` where id=#{id}
+</delete>
+
+<update id="updateFlowLog">
+update `tblflowlog` set 
+ `status`=#{status} ,   `employeeid`=#{employeeid} ,   `opinion`=#{opinion} ,   `file`=#{file} ,   `tablename`=#{tablename} ,   `tableid`=#{tableid} ,   `createtime`=#{createtime} ,   `statusnow`=#{statusnow} ,   `nodenow`=#{nodenow} ,   `statusnext`=#{statusnext} ,   `nodenext`=#{nodenext} ,   `issys`=#{issys} ,   `linkurl`=#{linkurl} ,   `remark`=#{remark} ,   `value`=#{value}   
+ where `id`=#{id}
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.FlowLogSearchBean"
+		resultType="com.pg.searchbean.FlowLogSearchBean">
+		select  b.name flowname,a.username , t.`id` ,   t.`status` ,   t.`employeeid` ,   t.`opinion` ,   t.`file` ,   t.`tablename` ,   t.`tableid` ,   t.`createtime` ,   t.`statusnow` ,   t.`nodenow` ,   t.`statusnext` ,   t.`nodenext` ,   t.`issys` ,   t.`linkurl` ,   t.`remark` ,   t.`value` ,   t.`descriptionnow` ,   t.`method` ,   t.`flowid` ,   t.`ismessage` ,   t.`isreturn`    from 
+		`tblflowlog` t  
+		left join tblemployee a on t.`employeeid` = a.id
+		left join tblflow b on b.id=t.flowid
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="issys != null "> and t.issys=#{issys}</if> 
+			<if test="employeeid != null and employeeid != ''"> and t.employeeid=#{employeeid}</if> 
+			<if test="remark != null and remark != ''"> and t.remark like concat('%',#{remark},'%')</if>
+			<if test="flowid != null and flowid != ''"> and b.id=#{flowid}</if>  
+			<if test="starttime!=null and starttime!=''">and t.createtime&gt;=#{starttime}</if>
+			<if test="endtime!=null and endtime!=''">and t.createtime  &lt; DATE_ADD(#{endtime},INTERVAL 1 DAY)</if> 
+			<if test="tableid != null and tableid != ''"> and t.tableid=#{tableid}</if> 
+			<if test="tablename != null and tablename != ''"> and t.tablename=#{tablename}</if> 
+		</trim>
+		order by t.createtime desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+	<select id="listCount" parameterType="com.pg.searchbean.FlowLogSearchBean" resultType="java.lang.Integer">
+				select count(*) from `tblflowlog` t 
+			left join tblemployee a on t.`employeeid` = a.id
+			left join tblflow b on b.id=t.flowid
+		<trim prefix="where" prefixOverrides="and|or">
+			  <if test="issys != null "> and t.issys=#{issys}</if> 
+			  <if test="remark != null and remark != ''"> and t.remark like concat('%',#{remark},'%')</if>
+			  <if test="flowid != null and flowid != ''"> and b.id=#{flowid}</if>
+			  <if test="starttime!=null and starttime!=''">and t.createtime&gt;=#{starttime}</if>
+			  <if test="endtime!=null and endtime!=''">and t.createtime  &lt; DATE_ADD(#{endtime},INTERVAL 1 DAY)</if> 
+			  <if test="tableid != null and tableid != ''"> and t.tableid=#{tableid}</if> 
+			  <if test="tablename != null and tablename != ''"> and t.tablename=#{tablename}</if> 
+		</trim>
+	</select>
+
+       <select id="getById" resultType="com.pg.searchbean.FlowLogSearchBean">
+       select  t.`id` ,   t.`status` ,   t.`employeeid` ,   t.`opinion` ,   t.`file` ,   t.`tablename` ,   t.`tableid` ,   t.`createtime` ,   t.`statusnow` ,   t.`nodenow` ,   t.`statusnext` ,   t.`nodenext` ,   t.`issys` ,   t.`linkurl` ,   t.`remark` ,   t.`value`,   t.`descriptionnow`   ,   t.`method` ,   t.`flowid` ,   t.`ismessage` ,   t.`isreturn`   from `tblflowlog` t where t.`id`=#{id}
+       </select>
+</mapper>
+	

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<title></title>
+<link href="css/style.css" rel="stylesheet"l type="text/css" />
+<link href="http://at.alicdn.com/t/font_441279_8so1unjfh41jor.css" rel="stylesheet"l type="text/css" />
+<script src="js/js.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="head-nav">
+        <ul class="head-ul">
+            <li class="active">待反馈</li>
+            <li>已处理</li>
+            <li>已结案</li>
+            <li>全部</li>
+        </ul>
+    </div>
+    <div class="content">
+        <ul class="content-ul">
+            <li class="type0">
+                <a href="content.html">
+                <h3>事件类型-待反馈</h3>
+                <div class="detail">
+                    <div class="time"><i class="icon iconfont icon-time"></i>2017/08/18</div>
+                    <div class="location"><i class="icon iconfont icon-map"></i>深圳赋安科技大厦</div>
+                </div>
+                <ul class="img">
+                    <li><img src="images/1.jpg" /></li>
+                    <li><img src="images/2.jpg" /></li>
+                    <li><img src="images/1.jpg" /></li>
+                    <li><img src="images/2.jpg" /></li>
+                    <li><img src="images/1.jpg" /></li>
+                </ul>
+                <p>深圳福安科技大厦A座802发生严重火灾,具知情人士透露,由于.......</p>
+                <div class="type">待反馈</div>
+                </a>
+            </li>
+
+            <li class="type1">
+                <a href="content.html">
+                <h3>事件类型-已处理</h3>
+                <div class="detail">
+                    <div class="time"><i class="icon iconfont icon-time"></i>2017/08/18</div>
+                    <div class="location"><i class="icon iconfont icon-map"></i>深圳赋安科技大厦</div>
+                </div>
+                <ul class="img">
+                    <li><img src="images/1.jpg" /></li>
+                    <li><img src="images/2.jpg" /></li>
+                    <li><img src="images/1.jpg" /></li>
+                    <li><img src="images/2.jpg" /></li>
+                    <li><img src="images/1.jpg" /></li>
+                </ul>
+                <p>深圳福安科技大厦A座802发生严重火灾,具知情人士透露,由于.......</p>
+                <div class="type">已处理</div>
+                </a>
+            </li>
+
+            <li class="type2">
+                <a href="content.html">
+                <h3>事件类型-已结案</h3>
+                <div class="detail">
+                    <div class="time"><i class="icon iconfont icon-time"></i>2017/08/18</div>
+                    <div class="location"><i class="icon iconfont icon-map"></i>深圳赋安科技大厦</div>
+                </div>
+                <ul class="img">
+                    <li><img src="images/1.jpg" /></li>
+                    <li><img src="images/2.jpg" /></li>
+                    <li><img src="images/1.jpg" /></li>
+                    <li><img src="images/2.jpg" /></li>
+                    <li><img src="images/1.jpg" /></li>
+                </ul>
+                <p>深圳福安科技大厦A座802发生严重火灾,具知情人士透露,由于.......</p>
+                <div class="type">已结案</div>
+                </a>
+            </li>
+
+
+            <li class="type0">
+                <a href="content.html">
+                <h3>事件类型-全部</h3>
+                <div class="detail">
+                    <div class="time"><i class="icon iconfont icon-time"></i>2017/08/18</div>
+                    <div class="location"><i class="icon iconfont icon-map"></i>深圳赋安科技大厦</div>
+                </div>
+                <ul class="img">
+                    <li><img src="images/1.jpg" /></li>
+                    <li><img src="images/2.jpg" /></li>
+                    <li><img src="images/1.jpg" /></li>
+                    <li><img src="images/2.jpg" /></li>
+                    <li><img src="images/1.jpg" /></li>
+                </ul>
+                <p>深圳福安科技大厦A座802发生严重火灾,具知情人士透露,由于.......</p>
+                <div class="type">待反馈</div>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</body>
+</html>

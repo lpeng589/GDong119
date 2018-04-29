@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+    <!-- description用来添加对taglib(标签库)的描述 -->
+    <description>自定义标签</description>
+    <!--taglib(标签库)的版本号 -->
+    <tlib-version>1.1</tlib-version>
+    <short-name>GaclTagLibrary</short-name>
+    <!-- 
+        为自定义标签库设置一个uri，uri以/开头，/后面的内容随便写，如这里的/pnkoo ，
+        在Jsp页面中引用标签库时，需要通过uri找到标签库
+        在Jsp页面中就要这样引入标签库：<%@taglib uri="/pnkoo" prefix="pk"%>
+    -->
+    <uri>/pnkoo</uri>
+    
+    <!--一个taglib(标签库)中包含多个自定义标签，每一个自定义标签使用一个tag标记来描述  -->
+    <!-- 一个tag标记对应一个自定义标签 -->
+     <tag>
+        <description>这个标签的作用:带入模块参数，检查权限，没有该权限 输出：displaynone（隐藏的样式）</description>
+        <!-- 
+            为标签处理器类配一个标签名，在Jsp页面中使用标签时是通过标签名来找到要调用的标签处理器类的
+            通过ruleControl就能找到对应的com.pg.util.RuleControl类
+         -->
+        <name>ruleControl</name>
+        <!-- 标签对应的处理器类-->  <!-- 在页面使用   <%@taglib uri="/pnkoo"  prefix="pk"%>  导入标签， 使用  <pk:ruleControl/>调用标签 -->
+        <tag-class>com.pg.tag.TagRuleControl</tag-class>
+        <body-content>empty</body-content>
+          <attribute>
+		   <name>module</name>
+		   <required>true</required>
+		  </attribute>
+    </tag>
+    
+   <tag>
+        <description>这个标签的作用:把要翻译的变量带入，会自动翻译成中文</description>
+        <name>dict</name>
+        <tag-class>com.pg.tag.TagDict</tag-class>
+        <body-content>empty</body-content>
+          <attribute>
+		   <name>key</name>
+		   <required>true</required>
+		   <rtexprvalue>true</rtexprvalue><!--  表示该自定义标签的某属性的值可以直接指定或者通过动态计算指定,默认为false -->
+		  </attribute>
+    </tag> 
+      <tag>
+        <description>这个标签的作用:根据权限加载可查询的权限</description>
+        <name>status</name>
+        <tag-class>com.pg.tag.TagStatus</tag-class>
+        <body-content>empty</body-content>
+          <attribute>
+		   <name>module</name>
+		   <required>true</required>
+		   <rtexprvalue>true</rtexprvalue><!--  表示该自定义标签的某属性的值可以直接指定或者通过动态计算指定,默认为false -->
+		  </attribute>
+    </tag> 
+    <tag>
+        <description>这个标签的作用:根据状态和表明获得状态名称。status为状态；tablename为对应表明；type为：-1返回上一节点状态；-2返回上上一节点状态；0为现在状态；1为下一节点状态；-2为下下节点状态</description>
+        <name>getstatusname</name>
+        <tag-class>com.pg.tag.TagByStatusAndTablename</tag-class>
+        <body-content>empty</body-content>
+          <attribute>
+		   <name>status</name>
+		   <required>true</required>
+		   <rtexprvalue>true</rtexprvalue><!--  表示该自定义标签的某属性的值可以直接指定或者通过动态计算指定,默认为false -->
+		  </attribute>
+		 <attribute>
+		   <name>tablename</name>
+		   <required>true</required>
+		  </attribute>
+		   <attribute>
+		   <name>type</name><!-- -1返回上一节点状态；-2返回上上一节点状态；0为现在状态；1为下一节点状态；-2为下下节点状态 -->
+		   <required>true</required>
+		  </attribute>
+    </tag> 
+    
+    <tag>
+        <description>这个标签的作用:根据表名加载节点表里面的状态</description>
+        <name>getflownodestatus</name>
+        <tag-class>com.pg.tag.TagFlowNodeStatus</tag-class>
+        <body-content>empty</body-content>
+		  <attribute>
+		   <name>tablename</name>
+		   <required>true</required>
+		  </attribute>
+    </tag> 
+    
+    <tag>
+        <description>这个标签的作用:用来使用公共比较时候做翻译</description>
+        <name>getCompareName</name>
+        <tag-class>com.pg.tag.TagCompare</tag-class>
+        <body-content>empty</body-content>
+		  <attribute>
+		   <name>keyname</name>
+		   <required>true</required>
+		    <rtexprvalue>true</rtexprvalue><!--  表示该自定义标签的某属性的值可以直接指定或者通过动态计算指定,默认为false -->
+		  </attribute>
+			  <attribute>
+		   <name>fieldname</name>
+		   <required>true</required>
+		   <rtexprvalue>true</rtexprvalue><!--  表示该自定义标签的某属性的值可以直接指定或者通过动态计算指定,默认为false -->
+		  </attribute>  
+    </tag>
+    
+     <tag>
+        <description>这个标签的作用:用来使用公共比较时候做翻译</description>
+        <name>getCompareValue</name>
+        <tag-class>com.pg.tag.TagCompareValue</tag-class>
+        <body-content>empty</body-content>
+			<attribute>
+		   <name>fieldname</name>
+		   <required>true</required>
+		   <rtexprvalue>true</rtexprvalue><!--  表示该自定义标签的某属性的值可以直接指定或者通过动态计算指定,默认为false -->
+		  </attribute> 
+		  
+		  <attribute>
+		   <name>fieldvalue</name>
+		   <required>true</required>
+		    <rtexprvalue>true</rtexprvalue><!--  表示该自定义标签的某属性的值可以直接指定或者通过动态计算指定,默认为false -->
+		  </attribute>
+    </tag>
+</taglib>

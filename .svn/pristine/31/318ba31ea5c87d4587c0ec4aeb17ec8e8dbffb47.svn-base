@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.AlarmdetailMapper">
+
+<insert id="addAlarmdetail"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.AlarmdetailBean" >
+insert into `p_alarmdetail` (  `content` ,     `sendtype` ,   `type` ,   `alarmid`     )
+values( #{content} ,     #{sendtype} ,   #{type} ,   #{alarmid}   )
+</insert>
+
+<delete id="delAlarmdetail">
+delete from `p_alarmdetail` where id=#{id}
+</delete>
+
+
+<delete id="delManyAlarmdetail">
+delete from `p_alarmdetail` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+
+<update id="updateAlarmdetail">
+update `p_alarmdetail` set 
+<!--   `content`=#{content} , -->
+<!--   `insertTime`=#{insertTime} , -->
+<!--   `sendtype`=#{sendtype} , -->
+<!--   `type`=#{type} , -->
+<!--   `alarmid`=#{alarmid}  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateNeedAlarmdetail">
+update `p_alarmdetail` set 
+`id`=#{id} ,
+<!--  <if test="content != null "> , `content`=#{content} </if>  -->
+<!--  <if test="insertTime != null "> , `insertTime`=#{insertTime} </if>  -->
+<!--  <if test="sendtype != null "> , `sendtype`=#{sendtype} </if>  -->
+<!--  <if test="type != null "> , `type`=#{type} </if>  -->
+<!--  <if test="alarmid != null "> , `alarmid`=#{alarmid} </if>  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateManyAlarmdetail">
+update `p_alarmdetail` set 
+`id`=#{id}
+<!--   `content`=#{content} , -->
+<!--   `insertTime`=#{insertTime} , -->
+<!--   `sendtype`=#{sendtype} , -->
+<!--   `type`=#{type} , -->
+<!--   `alarmid`=#{alarmid}  -->
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.AlarmdetailSearchBean"
+	resultType="com.pg.searchbean.AlarmdetailSearchBean">
+	select t.* from `p_alarmdetail` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		    <if test="sendtype != null "> and t.sendtype=#{sendtype}</if> 
+    <if test="type != null "> and t.type=#{type}</if> 
+    <if test="alarmid != null "> and t.alarmid=#{alarmid}</if>  
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+<select id="listNew" parameterType="com.pg.searchbean.AlarmdetailSearchBean"
+	resultType="com.pg.searchbean.AlarmdetailSearchBean">
+	select t.* from `p_alarmdetail` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		    and t.alarmid=#{alarmid}
+		    and t.id>#{id}
+		</trim>
+		order by t.id 
+	</select>	
+<select id="listCount" parameterType="com.pg.searchbean.AlarmdetailSearchBean" resultType="java.lang.Integer">
+			select count(*) from `p_alarmdetail` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		    <if test="sendtype != null "> and t.sendtype=#{sendtype}</if> 
+    <if test="type != null "> and t.type=#{type}</if> 
+    <if test="alarmid != null "> and t.alarmid=#{alarmid}</if> 
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.AlarmdetailSearchBean">
+   select t.* from `p_alarmdetail` t where t.`id`=#{id}
+</select>
+
+
+<select id="wxlist" parameterType="com.pg.searchbean.MSearchBean"
+	resultType="com.pg.searchbean.AlarmdetailSearchBean">
+	select t.* from `p_alarmdetail` t 
+	<trim prefix="where" prefixOverrides="and|or">
+    		and t.alarmid=#{alarmid}
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+<update id="updateRead" parameterType="java.lang.Integer">
+update `p_alarmdetail` set `read`=1 where alarmid=#{alarmid} and `read`=0;
+</update>	
+	
+<select id="getNotRead"  resultType="com.pg.searchbean.AlarmSearchBean">
+select a.id as id,count(b.id) as `count`,a.status as status,MAX(b.insertTime) as lastTime from `p_alarm` a join p_alarmdetail b on a.id=b.alarmid where a.status!=2 and b.`read`=0 group by a.id
+</select>
+</mapper>
+	

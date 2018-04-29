@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.PoslinkMapper">
+
+<insert id="addPoslink"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.PoslinkBean" >
+insert into `tblposlink` (  `key` ,   `url` ,   `description` ,   `linkurl` ,   `name` ,   `type`    ,   `rank`    )
+values( #{key} ,   #{url} ,   #{description} ,      #{linkurl} ,   #{name} ,   #{type}  ,   #{rank}    )
+</insert>
+
+
+<delete id="delPoslink">
+delete from `tblposlink` where id=#{id} 
+</delete>
+
+
+<update id="updatePoslink">
+update `tblposlink` set 
+ `url`=#{url} ,   `description`=#{description} , `linkurl`=#{linkurl}  , `rank`=#{rank}  
+ where `id`=#{id} 
+ 
+</update>
+
+
+
+
+<select id="list" parameterType="com.pg.searchbean.PoslinkSearchBean"
+		resultType="com.pg.searchbean.PoslinkSearchBean">
+		select  t.*   from `tblposlink` t 
+		<trim prefix="where" prefixOverrides="and|or">
+				<if test="id != null "> and t.id=#{id}</if> 
+			  <if test="key != null "> and t.key=#{key}</if> 
+			  <if test="url != null "> and t.url=#{url}</if> 
+			  <if test="description != null "> and t.description=#{description}</if> 
+			  <if test="linkurl != null "> and t.linkurl=#{linkurl}</if> 
+			  <if test="name != null "> and t.name=#{name}</if> 
+			  <if test="type != null "> and t.type=#{type}</if>   
+		</trim>
+		order by t.rank desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+	<select id="listCount" parameterType="com.pg.searchbean.PoslinkSearchBean" resultType="java.lang.Integer">
+				select count(*) from `tblposlink` t 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null "> and t.id=#{id}</if> 
+			  <if test="key != null "> and t.key=#{key}</if> 
+			  <if test="url != null "> and t.url=#{url}</if> 
+			  <if test="description != null "> and t.description=#{description}</if> 
+			  <if test="linkurl != null "> and t.linkurl=#{linkurl}</if> 
+			  <if test="name != null "> and t.name=#{name}</if> 
+			  <if test="type != null "> and t.type=#{type}</if>   
+		</trim>
+	</select>
+
+       <select id="getById" resultType="com.pg.searchbean.PoslinkSearchBean">
+       select  t.*   from `tblposlink` t where t.`id`=#{id}
+       
+       </select>
+       
+             <select id="jsonlist" resultType="com.pg.searchbean.PoslinkSearchBean">
+       select  t.url, t.description,t.linkurl  from tblposlink t  order by t.rank 
+       </select>
+       
+</mapper>
+	

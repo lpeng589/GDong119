@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.ImportMapper">
+
+ <select id="getTableid" resultType="java.lang.Integer">
+       select   id
+       from   ${tablename}     where  name=#{name}  limit 1
+       </select> 
+
+ <select id="getTableid2" resultType="java.lang.Integer">
+       select   id
+       from   ${tablename}     where  name=#{name}   ${parameter} limit 1
+       </select> 
+       
+     <select id="getTableid3" resultType="java.lang.Integer">
+       select   id
+       from   ${tablename}     where  ${name}   ${parameter} limit 1
+       </select> 
+         
+</mapper>
+	

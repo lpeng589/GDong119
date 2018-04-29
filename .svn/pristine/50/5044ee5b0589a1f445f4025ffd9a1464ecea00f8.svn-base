@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.UploadMapper">	
+	<insert id="addImg" parameterType="com.pg.bean.ImgBean" useGeneratedKeys="true" keyProperty="id">
+		insert into tblimg (pic,`code`,`filename`,`employid` ) values(#{pic},#{code},#{filename} ,#{employid})
+	</insert>
+	<select id="getImg" resultType="com.pg.bean.ImgBean">
+		select * from tblimg where `code`=#{code} 
+	</select>
+	<insert id="addFile" parameterType="com.pg.bean.FileBean" useGeneratedKeys="true" keyProperty="id">
+		insert into tblfile (type,`file`,`code`,filename,employid) values(#{type},#{file},#{code},#{filename},#{employid})
+	</insert>
+	<select id="getFile" resultType="com.pg.bean.FileBean">
+		select * from tblfile where `code`=#{code} 
+	</select>
+</mapper>

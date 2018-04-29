@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.UserMapper">
+
+<insert id="addUser"  keyProperty="id" useGeneratedKeys="true"  parameterType="com.pg.bean.UserBean" >
+insert into `p_user` (     `nickname` ,   `headimgurl` ,    `openid` ,   `city` ,   `sex` ,   `province` ,   `country`   ,   `wxopenid`    )
+values(   #{nickname} ,   #{headimgurl} ,    #{openid} ,   #{city} ,   #{sex} ,   #{province} ,   #{country} ,   #{wxopenid}   )
+</insert>
+
+<delete id="delUser">
+delete from `p_user` where id=#{id}
+</delete>
+
+
+<delete id="delManyUser">
+delete from `p_user` where 
+id in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+		)
+</delete>
+<update id="updateSign">
+update `p_user` set 
+  `sign_id`=#{sign_id} ,
+  `sign_name`=#{sign_name} ,
+  `sign_phone`=#{sign_phone} ,
+  `sign_ID_address`=#{sign_ID_address} ,
+  `sign_sex`=#{sign_sex} ,
+  `sign_nation`=#{sign_nation} ,
+  `sign_ID_birth`=#{sign_ID_birth} ,
+  `sign_ID_authority`=#{sign_ID_authority} ,
+  `sign_ID_valid_date`=#{sign_ID_valid_date} ,
+  `sign_validatedata`=#{sign_validatedata} ,
+  `sign_yt_errorcode`=#{sign_yt_errorcode} ,
+  `sign_yt_errormsg`=#{sign_yt_errormsg} ,
+  `sign_livestatus`=#{sign_livestatus} ,
+  `sign_livemsg`=#{sign_livemsg} ,
+  `sign_comparestatus`=#{sign_comparestatus} ,
+   `sign_comparestatus`=#{sign_comparestatus} ,
+  `sign_status`=#{sign_status} 
+ where `id`=#{id}
+</update>
+
+
+<update id="updateUser">
+update `p_user` set 
+`openid`=#{openid} 
+  <if test="nickname != null ">  , `nickname`=#{nickname} </if>
+  <if test="headimgurl != null ">  ,  `headimgurl`=#{headimgurl} </if>
+   <if test="city != null ">  , `city`=#{city} </if>
+   <if test="sex != null ">  , `sex`=#{sex} </if>
+   <if test="province != null ">  , `province`=#{province} </if>
+   <if test="country != null ">  , `country`=#{country} </if>
+ where `openid`=#{openid}
+</update>
+
+<update id="updateNeedUser">
+update `p_user` set 
+`id`=#{id} ,
+<!--  <if test="status != null "> , `status`=#{status} </if>  -->
+<!--  <if test="nickname != null "> , `nickname`=#{nickname} </if>  -->
+<!--  <if test="headimgurl != null "> , `headimgurl`=#{headimgurl} </if>  -->
+<!--  <if test="insertTime != null "> , `insertTime`=#{insertTime} </if>  -->
+<!--  <if test="openid != null "> , `openid`=#{openid} </if>  -->
+<!--  <if test="city != null "> , `city`=#{city} </if>  -->
+<!--  <if test="sex != null "> , `sex`=#{sex} </if>  -->
+<!--  <if test="province != null "> , `province`=#{province} </if>  -->
+<!--  <if test="country != null "> , `country`=#{country} </if>  -->
+ where `id`=#{id}
+</update>
+
+<update id="updateManyUser">
+update `p_user` set 
+`id`=#{id}
+<!--   `status`=#{status} , -->
+<!--   `nickname`=#{nickname} , -->
+<!--   `headimgurl`=#{headimgurl} , -->
+<!--   `insertTime`=#{insertTime} , -->
+<!--   `openid`=#{openid} , -->
+<!--   `city`=#{city} , -->
+<!--   `sex`=#{sex} , -->
+<!--   `province`=#{province} , -->
+<!--   `country`=#{country}  -->
+ where 
+ `id` in(
+			<foreach collection="ids" index="index" item="item" separator=","> 
+				#{item}
+			</foreach>
+			)  
+</update>
+
+<select id="list" parameterType="com.pg.searchbean.UserSearchBean"
+	resultType="com.pg.searchbean.UserSearchBean">
+	select t.* from `p_user` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>--> 
+    <!-- <if test="status != null  and status !='' "> and t.status=#{status}</if>--> 
+    <!-- <if test="nickname != null  and nickname !='' "> and t.nickname=#{nickname}</if>--> 
+    <!-- <if test="headimgurl != null  and headimgurl !='' "> and t.headimgurl=#{headimgurl}</if>--> 
+    <!-- <if test="insertTime != null  and insertTime !='' "> and t.insertTime=#{insertTime}</if>--> 
+    <!-- <if test="openid != null  and openid !='' "> and t.openid=#{openid}</if>--> 
+    <!-- <if test="city != null  and city !='' "> and t.city=#{city}</if>--> 
+    <!-- <if test="sex != null  and sex !='' "> and t.sex=#{sex}</if>--> 
+    <!-- <if test="province != null  and province !='' "> and t.province=#{province}</if>--> 
+    <!-- <if test="country != null  and country !='' "> and t.country=#{country}</if>-->   
+		</trim>
+		order by t.id desc 
+		<if test="limitFlag==null||limitFlag==true"> limit #{limitStart},#{limitSize} </if>
+	</select>
+	
+<select id="listCount" parameterType="com.pg.searchbean.UserSearchBean" resultType="java.lang.Integer">
+			select count(*) from `p_user` t 
+	<trim prefix="where" prefixOverrides="and|or">
+		<!-- <if test="id != null  and id !='' "> and t.id=#{id}</if>  -->
+   <!-- <if test="status != null  and status !='' "> and t.status=#{status}</if>  -->
+   <!-- <if test="nickname != null  and nickname !='' "> and t.nickname=#{nickname}</if>  -->
+   <!-- <if test="headimgurl != null  and headimgurl !='' "> and t.headimgurl=#{headimgurl}</if>  -->
+   <!-- <if test="insertTime != null  and insertTime !='' "> and t.insertTime=#{insertTime}</if>  -->
+   <!-- <if test="openid != null  and openid !='' "> and t.openid=#{openid}</if>  -->
+   <!-- <if test="city != null  and city !='' "> and t.city=#{city}</if>  -->
+   <!-- <if test="sex != null  and sex !='' "> and t.sex=#{sex}</if>  -->
+   <!-- <if test="province != null  and province !='' "> and t.province=#{province}</if>  -->
+   <!-- <if test="country != null  and country !='' "> and t.country=#{country}</if>  --> 
+	</trim>
+</select>
+
+<select id="getById" resultType="com.pg.searchbean.UserSearchBean">
+   select t.sign_id, t.sign_name, t.sign_phone, t.sign_sex, t.sign_nation, t.sign_ID_valid_date, t.sign_status ,t.headimgurl from `p_user` t where t.`id`=#{id}
+</select>
+
+<select id="getByOpenid" resultType="com.pg.searchbean.UserSearchBean">
+   select t.* from `p_user` t where t.`openid`=#{openid}
+</select>
+
+<select id="getBywxopenid" resultType="com.pg.searchbean.UserSearchBean">
+   select t.* from `p_user` t where t.`wxopenid`=#{wxopenid}
+</select>
+
+       
+              <select id="getByToken" resultType="com.pg.bean.UserBean">
+       select t.*  from `p_user` t  where t.`token`=#{token} 
+       </select>
+       
+       <update id="updateToken">
+update `p_user` set 
+ `token`=#{token} ,  `tokentime`=#{tokentime}  
+ where `id`=#{id}
+</update>
+
+</mapper>
+	

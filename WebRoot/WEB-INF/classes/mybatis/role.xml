@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pg.mapper.RoleMapper">
+	<insert id="add" parameterType="com.pg.bean.RoleBean">
+	    insert into tblrole(role_name,description,employee_id,status) 
+	    values(#{role_name},#{description},#{employee_id},#{status})
+	</insert>
+	
+	<update id="update">
+		update tblrole set role_name=#{role_name},description=#{description},`status`=#{status} where id=#{id}
+		
+	</update>
+
+	<delete id="delete">
+		delete from tblrole where id in(
+		<foreach collection="ids" index="index" item="item" separator=","> 
+			#{item}		
+		</foreach>
+		)
+		
+	</delete>
+
+	<select id="list" parameterType="com.pg.searchbean.RoleSearchBean"
+		resultType="com.pg.bean.RoleBean">
+		select * from tblrole 
+		<trim prefix="where" prefixOverrides="and|or">			
+			<if test="id !=null">and id=#{id}</if>
+			<if test="role_name!=null and role_name!='' ">and role_name like concat('%',#{role_name},'%')</if>
+			<if test="status!=null">and status=#{status}</if>
+		</trim>
+		order by id desc 
+		limit #{limitStart},#{limitSize}
+	</select>
+	
+	
+	
+	<select id="listCount" parameterType="com.pg.searchbean.RoleSearchBean"
+		resultType="java.lang.Integer">
+				select count(*) from tblrole 
+		<trim prefix="where" prefixOverrides="and|or">		
+			<if test="id !=null">and id=#{id}</if>
+			<if test="role_name!=null and role_name!='' ">and role_name like concat('%',#{role_name},'%')</if>
+			<if test="status!=null">and status=#{status}</if>
+		</trim>
+	</select>
+	
+	<select id="getById" resultType="com.pg.bean.RoleBean">
+		select * from tblrole where id=#{id}  
+		
+	</select>
+	
+	<select id="getByName" resultType="com.pg.bean.RoleBean">
+		select * from tblrole where role_name=#{name}  
+		
+	</select>
+	
+	<select id="moduleList" resultType="com.pg.bean.ModuleBean"> 
+		select a.id,a.idstr,a.name,a.ismenu,a.description,a.category,b.module_id as moduleid
+		from tblmodule a left join (select * from tblrolemodule where
+		role_id=#{id}) b on a.id = b.module_id where
+		a.orderid&gt;0
+		order by a.category,a.orderid;	
+	</select>
+		
+		<update id="moduleSet">
+			insert into tblrolemodule (role_id,module_id) values
+			<foreach collection="module_id" index="index" item="item" separator=","> 
+				(#{role_id}, #{item})	
+			</foreach>
+			
+		</update>
+	<delete id="moduleDel">
+		delete from tblrolemodule where role_id=#{role_id} 
+	</delete>
+	
+	
+</mapper>
